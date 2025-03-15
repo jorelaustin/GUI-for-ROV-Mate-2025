@@ -1,0 +1,11 @@
+# JSON File Example
+{
+    "People":  [
+      {
+       "Age": "18",
+       "Name": "Jeremy Cortez",
+       "Height": "5 9",
+       "Gender": "Male"
+      }
+    ]
+}
