@@ -1,11 +1,53 @@
-# JSON File Example
+# Example ROV Data File
 {
-    "People":  [
+  "ROV Depth": [
       {
-       "Age": "18",
-       "Name": "Jeremy Cortez",
-       "Height": "5 9",
-       "Gender": "Male"
+       "Seconds": "1",
+       "Height": ["5 ft", "9 in"]
+      },
+      {
+        "Seconds": "2",
+        "Height": ["5 ft", "10 in"]
+      },
+      {
+        "Seconds": "3",
+        "Height": ["6 ft", "0 in"]
+      },
+      {
+        "Seconds": "4",
+        "Height": ["6 ft", "5 in"]
+      },
+      {
+        "Seconds": "5",
+        "Height": ["6 ft", "9 in"]
+      },
+      {
+        "Seconds": "6",
+        "Height": ["7 ft", "3 in"]
+      },
+      {
+        "Seconds": "7",
+        "Height": ["7 ft", "8 in"]
+      },
+      {
+        "Seconds": "8",
+        "Height": ["8 ft", "3 in"]
+      },
+      {
+        "Seconds": "9",
+        "Height": ["9 ft", "4 in"]
+      },
+      {
+        "Seconds": "10",
+        "Height": ["9 ft", "10 in"]
+      },
+      {
+         "Seconds": "11",
+         "Height": ["10 ft", "0 in"]
+      },
+      {
+         "Seconds": "12",
+         "Height": ["10 ft", "9 in"]
       }
     ]
 }
