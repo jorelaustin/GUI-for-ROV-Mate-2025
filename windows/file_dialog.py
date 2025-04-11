@@ -1,20 +1,24 @@
-import sys
-import pandas as pd
-import sqlite3
-import uuid
-import io
-import datetime
 import os
+import io
 import json
-from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QFileDialog,
-    QVBoxLayout, QWidget, QTableWidget, QTableWidgetItem,
-    QComboBox, QHBoxLayout
-)
+import uuid
+import sqlite3
+import datetime
+import pandas as pd
+
+#os.environ["QT_API"] = "pyside6" 
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+
+from PySide6.QtCore import QTimer, QFile
+from PySide6.QtWidgets import (
+    QDialog, QFileDialog, QVBoxLayout, QWidget, QComboBox, QPushButton,
+    QMessageBox, QTableWidgetItem
+)
+from PySide6.QtUiTools import QUiLoader
+
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -22,61 +26,50 @@ class MplCanvas(FigureCanvas):
         self.axes = fig.add_subplot(111)
         super().__init__(fig)
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
+class OpenFileDialogWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        loader = QUiLoader()
 
-        # Automatically open file dialog on startup
-        QTimer.singleShot(0, self.open_file_dialog)
+        ui_path = os.path.join(os.path.dirname(__file__), "..", "ui", "file_dialog.ui")
+        ui_path = os.path.normpath(ui_path)  # normalize slashes for Windows
+        file = QFile(ui_path)  # Path to your UI file
+        file.open(QFile.ReadOnly)
+        self.ui = loader.load(file) # Organize the UIs into folder and find them.
 
-        self.setWindowTitle("JSON to CSV Viewer and Grapher")
-
-        # Button to attach file
-        self.attach_button = QPushButton("Attach JSON File")
-        self.attach_button.clicked.connect(self.open_file_dialog)
-
-        # Table widget to display data
-        self.table_widget = QTableWidget()
-
-        # Combo boxes for axis selection
-        self.x_axis_combo = QComboBox()
-        self.y_axis_combo = QComboBox()
-        self.plot_button = QPushButton("Plot Graph")
-        self.plot_button.clicked.connect(self.plot_graph)
-        self.plot_button.setEnabled(False) # Disable initially
-        self.save_button = QPushButton("Save Files")
-        self.save_button.clicked.connect(self.save_to_db)
-        #self.save_button.setEnabled(False) # Disable initially
-
-        # Matplotlib canvas
-        self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
-
-        # Layout for axis selection
-        axis_layout = QHBoxLayout()
-        axis_layout.addWidget(QLabel("X-Axis:"))
-        axis_layout.addWidget(self.x_axis_combo)
-        axis_layout.addWidget(QLabel("Y-Axis:"))
-        axis_layout.addWidget(self.y_axis_combo)
-        axis_layout.addWidget(self.plot_button)
-        axis_layout.addWidget(self.save_button)
-
-        # Layout setup
+        # Set the layout of this QDialog to hold the loaded UI
         layout = QVBoxLayout()
-        layout.addWidget(self.attach_button)
-        layout.addWidget(self.table_widget)
-        layout.addLayout(axis_layout)
+        layout.addWidget(self.ui)
+        self.setLayout(layout)
+
+        # Set window title and fit the contents
+        self.adjustSize()
+        self.setWindowTitle("JSON to CSV Viewer")
+
+        # Find object and it's name
+        self.x_axis_combo = self.ui.findChild(QComboBox, "xAxisComboBox")
+        self.y_axis_combo = self.ui.findChild(QComboBox, "yAxisComboBox")
+        self.plot_button = self.ui.findChild(QPushButton, "plotButton")
+        self.plot_button.setEnabled(False) # Disable initially
+        self.save_button = self.ui.findChild(QPushButton, "saveFilesButton")
+
+        # Create canvas
+        self.canvas = MplCanvas(self)
+        # Find the placeholder QWidget
+        placeholder = self.ui.findChild(QWidget, "canvasPlaceholder")
+        # Insert the canvas into the placeholder
+        layout = QVBoxLayout(placeholder)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.canvas)
 
-        print(self.width())   # returns 640
-        print(self.height())  # returns 480
+        # Connect the QPushButton "plotButton" to plot a graph
+        self.plot_button.clicked.connect(self.plot_graph)
 
+        # Connect the QPushButton "saveFilesbutton" to save to db file
+        self.save_button.clicked.connect(self.save_to_db)
 
-        # Container widget
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
-
-        self.df = None # Store the DataFrame
+        # Delay file dialog until UI is fully shown
+        QTimer.singleShot(0, self.open_file_dialog)
 
     def open_file_dialog(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -84,6 +77,8 @@ class MainWindow(QMainWindow):
         )
         if file_path:
             self.convert_json_to_csv(file_path)
+        else:
+            self.reject()  # Close the dialog if no file is selected
 
     def convert_json_to_csv(self, file_path):
         try:
@@ -112,14 +107,15 @@ class MainWindow(QMainWindow):
             self.plot_button.setEnabled(False)
 
     def display_csv_in_table(self, df):
-        self.table_widget.setRowCount(df.shape[0])
-        self.table_widget.setColumnCount(df.shape[1])
-        self.table_widget.setHorizontalHeaderLabels(df.columns)
+        table = self.ui.tableWidget
+        table.setRowCount(df.shape[0])
+        table.setColumnCount(df.shape[1])
+        table.setHorizontalHeaderLabels(df.columns)
 
         for row in range(df.shape[0]):
             for col in range(df.shape[1]):
                 item = QTableWidgetItem(str(df.iat[row, col]))
-                self.table_widget.setItem(row, col, item)
+                table.setItem(row, col, item)
 
     def plot_graph(self):
         if self.df is not None:
@@ -145,26 +141,17 @@ class MainWindow(QMainWindow):
         else:
             print("No data loaded to plot.")
 
-    def save_graph_as_image(self):
-        if self.df is not None:
-            file_path, _ = QFileDialog.getSaveFileName(
-                self, "Save Graph as Image", "", "PNG Files (*.png);;All Files (*)"
-            )
-            if file_path:
-                try:
-                    self.canvas.figure.savefig(file_path)
-                    print(f"Graph saved to {file_path}")
-                except Exception as e:
-                    print(f"Error saving graph: {e}")
-            else:
-                print("Save operation cancelled.")
-        else:
-            print("No data available to save.")
-
     def save_to_db(self):
         if self.df is not None:
-            os.makedirs("data", exist_ok=True)
-            conn = sqlite3.connect("data/drone_data.db")
+            # Resolve full path to database file
+            db_path = os.path.join(os.path.dirname(__file__), "..", "data", "drone_data.db")
+            db_path = os.path.normpath(db_path)
+
+            # Make sure the parent folder exists
+            os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
+            # Connect to the DB
+            conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
 
             # Unique ID for the DataFrame table
@@ -198,12 +185,9 @@ class MainWindow(QMainWindow):
 
             conn.commit()
             conn.close()
+
+            # Show confirmation to the user
+            QMessageBox.information(self, "Saved", "Data and metadata saved successfully!")
             print(f"Data and metadata saved to database under table '{unique_id}'")
-
-from PySide6.QtWidgets import QLabel
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+            # Close the dialog or give user feedback
+            self.accept()  # use self.reject() if canceling instead

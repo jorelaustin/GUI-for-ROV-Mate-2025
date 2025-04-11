@@ -24,13 +24,13 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>2</y>
       <width>793</width>
-      <height>563</height>
+      <height>561</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="VideoFeed">
      <attribute name="title">
@@ -65,7 +65,7 @@
        <property name="geometry">
         <rect>
          <x>260</x>
-         <y>30</y>
+         <y>31</y>
          <width>81</width>
          <height>31</height>
         </rect>
