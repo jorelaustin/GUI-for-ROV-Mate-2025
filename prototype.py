@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtUiTools import QUiLoader
 
-from windows.file_dialog import OpenFileDialogWindow 
+from libaries.window.file_dialog import FILE_SELECTOR 
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -35,7 +35,7 @@ class MyApp(QMainWindow):
         self.button_attachFile.clicked.connect(self.open_file_dialog)
 
     def open_file_dialog(self):
-        self.dialog = OpenFileDialogWindow(self)
+        self.dialog = FILE_SELECTOR(self)
         self.dialog.show()
 
 # Set the attribute BEFORE creating QApplication

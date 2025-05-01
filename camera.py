@@ -17,13 +17,13 @@ class MainWindow(QWidget):
         self.CancelBTN.clicked.connect(self.CancelFeed)
         self.VBL.addWidget(self.CancelBTN)
         
-        '''
+        
         self.Worker1 = Worker1()
 
         self.Worker1.start()
         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
         self.setLayout(self.VBL)
-        '''
+
 
     def ImageUpdateSlot(self, Image):
         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
@@ -31,7 +31,6 @@ class MainWindow(QWidget):
     def CancelFeed(self):
         self.Worker1.stop()
 
-'''
 class Worker1(QThread):
     ImageUpdate = Signal(QImage)
     def run(self):
@@ -49,7 +48,6 @@ class Worker1(QThread):
     def stop(self):
         self.ThreadActive = False
         self.quit()
-'''
 
 if __name__ == "__main__":
     App = QApplication(sys.argv)

@@ -26,12 +26,12 @@ class MplCanvas(FigureCanvas):
         self.axes = fig.add_subplot(111)
         super().__init__(fig)
 
-class OpenFileDialogWindow(QDialog):
+class FILE_SELECTOR(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         loader = QUiLoader()
 
-        ui_path = os.path.join(os.path.dirname(__file__), "..", "ui", "file_dialog.ui")
+        ui_path = os.path.join(os.path.dirname(__file__), "..", "..", "ui", "file_dialog.ui")
         ui_path = os.path.normpath(ui_path)  # normalize slashes for Windows
         file = QFile(ui_path)  # Path to your UI file
         file.open(QFile.ReadOnly)
@@ -144,7 +144,7 @@ class OpenFileDialogWindow(QDialog):
     def save_to_db(self):
         if self.df is not None:
             # Resolve full path to database file
-            db_path = os.path.join(os.path.dirname(__file__), "..", "data", "drone_data.db")
+            db_path = os.path.join(os.path.dirname(__file__), "..", "..", "database", "drone_data.db")
             db_path = os.path.normpath(db_path)
 
             # Make sure the parent folder exists
