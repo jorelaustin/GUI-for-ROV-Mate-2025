@@ -73,7 +73,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="mapButton">
+        <widget class="QPushButton" name="mappingButton">
          <property name="text">
           <string>Mapping</string>
          </property>
@@ -160,7 +160,7 @@
                         <enum>QFrame::NoFrame</enum>
                        </property>
                        <property name="text">
-                        <string>Camera Feed 4</string>
+                        <string/>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -223,7 +223,7 @@
                         <enum>QFrame::NoFrame</enum>
                        </property>
                        <property name="text">
-                        <string>Camera Feed 2</string>
+                        <string/>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -286,7 +286,7 @@
                         <enum>QFrame::NoFrame</enum>
                        </property>
                        <property name="text">
-                        <string>Camera Feed 3</string>
+                        <string/>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -407,7 +407,7 @@
                       <enum>QFrame::NoFrame</enum>
                      </property>
                      <property name="text">
-                      <string>Camera Feed 1</string>
+                      <string/>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignHCenter|Qt::AlignTop</set>

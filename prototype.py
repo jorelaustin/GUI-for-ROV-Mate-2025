@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtUiTools import QUiLoader
 
+from libaries.visual.visualEffects import STYLE
 from libaries.window.file_dialog import FILE_SELECTOR 
 
 class MyApp(QMainWindow):

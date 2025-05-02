@@ -48,12 +48,16 @@ class STYLE():
                 padding: 6px 12px;
             }
                                 
-            #dataButton, #mapButton{
+            #dataButton, #mappingButton{
                 font-size: 12pt;
                 color: white;
                 background-color: #424242;
                 border-radius: 14px;
                 padding: 6px 12px;
+            }
+                                
+            QComboBox {
+                background-color: #424242;               
             }
 
             QWidget {
@@ -64,17 +68,16 @@ class STYLE():
             QGroupBox {
                 background-color: #212121
             }
-
-            QComboBox {
-                background-color: #424242;
-                color: white;
-            } 
                                 
             QPushButton {
-                background-color: #424242                    
+                background-color: #424242        
             }
                                 
-            #control_panel_camera_widget, #control_panel_functions_widget, #buttonsPanel{
+            #camera_feed_1, #camera_feed_2, #camera_feed_3, #camera_feed_4 {
+                background-color: black;                    
+            }
+                                
+            QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget, #buttonsPanel{
                 border: 1px solid #fafafa;
                 border-radius: 10px;
             }       

@@ -16,7 +16,6 @@ from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtUiTools import QUiLoader
 
-
 class MyApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -29,13 +28,40 @@ class MyApp(QMainWindow):
         self.setCentralWidget(self.ui)
         self.setWindowTitle("ROV Dashboard")  
 
-        self.stacked_widget = self.ui.findChild(QStackedWidget, "stackedWidget") # Tab widget
-        self.stacked_widget.setCurrentIndex(0) # Open up on first tab
+        # Open up on first tab
+        self.stacked_widget = self.ui.findChild(QStackedWidget, "stackedWidget") # stacked widget
+        self.stacked_widget.setCurrentIndex(0) 
+
+        # Grabbing buttons for switching tabs
+        self.controlPanelButton = self.ui.findChild(QPushButton, "controlPanelButton")
+        self.dataButton = self.ui.findChild(QPushButton, "dataButton")
+        self.mappingButton = self.ui.findChild(QPushButton, "mappingButton")
+
+        # Switching tabs
+        self.controlPanelButton.clicked.connect(lambda: self.switchTabs(0))
+        self.dataButton.clicked.connect(lambda: self.switchTabs(1))
+        self.mappingButton.clicked.connect(lambda: self.switchTabs(2))
 
         self.style = STYLE()
         self.style.setStylesheet(QApplication.instance())
 
         self.controlPanelTab() # Control Panel
+
+    def switchTabs(self, tab_index: int):
+        # Switch stacked widget
+        if 0 <= tab_index < self.stacked_widget.count():
+            self.stacked_widget.setCurrentIndex(tab_index)
+
+        # Reset all button styles
+        buttons = [self.controlPanelButton, self.dataButton, self.mappingButton]
+        for i, btn in enumerate(buttons):
+            if i == tab_index:
+                # Active button style
+                btn.setStyleSheet("background-color: #007ACC;")  # blue
+            else:
+                # Inactive button style
+                btn.setStyleSheet("background-color: #424242;")  # gray
+
 
     def controlPanelTab(self):
         # Find object and it's name
@@ -85,11 +111,13 @@ class CAMERA:
         self.timer.timeout.connect(self.update_frame)
 
         self.toggle_button.clicked.connect(self.toggle_camera)
-        self.combo_box.addItems([str(i) for i in range(4)])
+        self.combo_box.addItems([f"Camera {i+1}" for i in range(4)])  # Named cameras
 
     def toggle_camera(self):
         if self.capture is None:
-            cam_index = int(self.combo_box.currentText())
+            cam_text = self.combo_box.currentText()
+            cam_index = int(cam_text.split()[-1]) - 1  # Convert "Camera 1" → 0
+            
             cap = cv2.VideoCapture(cam_index)
             if cap.isOpened():
                 self.capture = cap
@@ -106,7 +134,7 @@ class CAMERA:
             self.capture.release()
             self.capture = None
             self.label.clear()
-            self.label.setText("Camera feed")
+            self.label.setStyleSheet("background-color: black;")
             self.toggle_button.setStyleSheet("background-color: #424242;") #Turn ON
 
     def update_frame(self):
