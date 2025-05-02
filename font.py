@@ -7,6 +7,7 @@ font_id = QFontDatabase.addApplicationFont("fonts/MyFont.ttf")
 if font_id != -1:
     family = QFontDatabase.applicationFontFamilies(font_id)[0]
     custom_font = QFont(family, 10)
+    app.setFont(custom_font)
     print(f"Loaded custom font: {family}")
 else:
     print("Failed to load custom font.")
