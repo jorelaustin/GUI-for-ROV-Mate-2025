@@ -18,7 +18,8 @@ class WebcamHUD(QWidget):
         self.video_label.setScaledContents(True)
 
         # Text overlay
-        self.text_overlay = QLabel("Welcome Crush Depth", self)
+        self.text = "welcome to Crush Depth"
+        self.text_overlay = QLabel(self.text, self)
         self.text_overlay.setStyleSheet("color: blue; font-size: 32px; font-weight: bold;")
         self.text_overlay.move(20, 20)  # Text positioning to the top left
         self.text_overlay.resize(400, 50)  # Set fixed size
@@ -33,6 +34,10 @@ class WebcamHUD(QWidget):
             self.timer.timeout.connect(self.update_frame)
             self.timer.start(30)
 
+    def change_text(self, text):
+        self.text = text
+        
+
     def update_frame(self):
         ret, frame = self.cap.read()
         if ret:
@@ -42,6 +47,8 @@ class WebcamHUD(QWidget):
             qt_image = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(qt_image)
             self.video_label.setPixmap(pixmap)
+
+            self.text_overlay.setText(self.text)
 
     def resizeEvent(self, event):  # Resize video and overlay to fill window
         self.video_label.resize(self.size())
@@ -61,4 +68,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = WebcamHUD()
     window.show()
+    NewText = input('Please input your velocity: ')
+    window.change_text(NewText)
+
     sys.exit(app.exec())
