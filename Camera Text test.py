@@ -12,7 +12,7 @@ class WebcamHUD(QWidget):
         self.setWindowTitle("Webcam HUD")
         self.setGeometry(100, 100, 800, 600)
 
-        # Webcam display label
+        # Webcam display
         self.video_label = QLabel(self)
         self.video_label.setGeometry(0, 0, 800, 600)
         self.video_label.setScaledContents(True)
@@ -20,19 +20,14 @@ class WebcamHUD(QWidget):
         # Text overlay
         self.text_overlay = QLabel("Welcome Crush Depth", self)
         self.text_overlay.setStyleSheet("color: blue; font-size: 32px; font-weight: bold;")
-        self.text_overlay.move(20, 20)  # Position near top-left
+        self.text_overlay.move(20, 20)  # Text positioning to the top left
         self.text_overlay.resize(400, 50)  # Set fixed size
         self.text_overlay.setAttribute(Qt.WA_TransparentForMouseEvents)
 
-        # Semi-transparent effect
-        opacity = QGraphicsOpacityEffect()
-        opacity.setOpacity(0.8)
-        self.text_overlay.setGraphicsEffect(opacity)
 
-        # OpenCV camera
-        self.cap = cv2.VideoCapture(0)
-        if not self.cap.isOpened():
-            self.text_overlay.setText("No camera found.")
+        self.cap = cv2.VideoCapture(0) # OpenCV camera
+        if not self.cap.isOpened(): # Conditional function if the camera is not working
+            self.text_overlay.setText("No camera found.") 
         else:
             self.timer = QTimer()
             self.timer.timeout.connect(self.update_frame)
@@ -48,8 +43,7 @@ class WebcamHUD(QWidget):
             pixmap = QPixmap.fromImage(qt_image)
             self.video_label.setPixmap(pixmap)
 
-    def resizeEvent(self, event):
-        # Resize video and overlay to fill window
+    def resizeEvent(self, event):  # Resize video and overlay to fill window
         self.video_label.resize(self.size())
         self.text_overlay.move(20, 20)
         return super().resizeEvent(event)
@@ -58,6 +52,10 @@ class WebcamHUD(QWidget):
         if self.cap.isOpened():
             self.cap.release()
         event.accept()
+
+    def keyPressEvent(self, event): # This function closes the application if q is entered
+        if event.key() == Qt.Key_Q:  
+            self.close()  
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
