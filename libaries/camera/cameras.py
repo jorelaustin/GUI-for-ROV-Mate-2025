@@ -1,7 +1,8 @@
 import sys
 import cv2
+import os
 from PySide6.QtCore import QTimer, Qt, QFile
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QImage, QPixmap, QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtUiTools import QUiLoader
 
@@ -14,6 +15,9 @@ class CAMERA:
         self.timer = QTimer(parent)
         self.timer.timeout.connect(self.update_frame)
 
+        icon_path = os.path.join(os.path.dirname(__file__), "..", "..", "graphics", "white_camera.png")  # Replace with your image path
+        self.icon = QIcon(os.path.normpath(icon_path))
+        self.toggle_button.setIcon(self.icon)
         self.toggle_button.clicked.connect(self.toggle_camera)
         self.combo_box.addItems([f"Camera {i+1}" for i in range(4)])  # Named cameras
 
