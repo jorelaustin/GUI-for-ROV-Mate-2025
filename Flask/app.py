@@ -4,7 +4,7 @@ import cv2
 app = Flask(__name__)
 
 # You can change 0 to a video stream URL or /dev/videoX
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(1)
 
 def gen_frames():
     while True:
@@ -29,4 +29,5 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050)
+    #app.run(host='0.0.0.0', port=5050)
+	app.run()
