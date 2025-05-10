@@ -133,6 +133,38 @@ class CAMERAS:
             if not self.feed_enabled[0]:
                 self.toggle_buttons[0].click()  # Programmatically toggle it on
 
+    def set_primary_only_view(self, camera_index=0):
+        """
+        Display only the primary camera on the first label.
+        Hide other feeds and turn off their capture.
+        """
+        for i in range(3):
+            if i == 0:
+                #self.combos[i].setCurrentIndex(camera_index)
+                self.feed_enabled[i] = True
+                self.toggle_buttons[i].setChecked(True)
+                self.labels[i].show()
+            else:
+                self.feed_enabled[i] = False
+                self.toggle_buttons[i].setChecked(False)
+                self.labels[i].hide()  # Hide the QLabel
+
+        # print(f"[View] Primary-only view set to Camera {camera_index}")
+
+    def set_three_camera_view(self):
+        """
+        Display all three camera feeds on all three labels.
+        Set default camera indices (0, 1, 2) or use previously selected.
+        """
+        for i in range(3):
+            #self.combos[i].setCurrentIndex(i)
+            self.feed_enabled[i] = True
+            self.toggle_buttons[i].setChecked(True)
+            self.labels[i].show()  # Make sure all labels are visible
+
+        # print("[View] Switched to 3-camera view")
+
+
     def release_captures(self):
         for cap in self.captures:
             if cap is not None:

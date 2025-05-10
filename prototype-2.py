@@ -2,7 +2,7 @@ import sys
 from PySide6.QtGui import QAction, QFont, QFontDatabase, QKeyEvent
 from PySide6.QtCore import QCoreApplication, QFile, Qt
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QStackedWidget, QLabel, QComboBox
+    QApplication, QMainWindow, QPushButton, QStackedWidget, QLabel, QComboBox, QWidget
 )
 from PySide6.QtUiTools import QUiLoader
 
@@ -15,7 +15,7 @@ class MyApp(QMainWindow):
 
         # Load UI file dynamically
         loader = QUiLoader()
-        file = QFile("ui/main3-test.ui")  # Path to your UI file
+        file = QFile("ui/main4-test.ui")  # Path to your UI file
         file.open(QFile.ReadOnly)
         self.ui = loader.load(file)  # Loads in "main.ui" 
         self.setCentralWidget(self.ui)
@@ -57,10 +57,17 @@ class MyApp(QMainWindow):
 
 
     def controlPanelTab(self):
+        
         # Find object and it's name
         self.program_exit = self.ui.findChild(QPushButton, "program_exit") # Quit action
         # Connect the QAction "actionQuit" to quit the application
         self.program_exit.clicked.connect(QApplication.instance().quit)  # Quit the application
+
+        # Example toggle button in your GUI
+        self.secondary_cameras = self.ui.findChild(QWidget, "secondary_camera_feeds")
+        self.toggle_view_button = self.ui.findChild(QPushButton, "toggleViewButton")
+        self.toggle_view_button.clicked.connect(self.toggle_view_mode)
+        self.current_mode = "multi"
 
         # Dynamically change children once for
         self.cam_1_label = self.ui.findChild(QLabel, "camera_feed_1")
@@ -76,7 +83,7 @@ class MyApp(QMainWindow):
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
 
         # Initialize camera handlers
-        self.controller = CAMERAS(
+        self.cameras = CAMERAS(
             labels=[
                 self.cam_1_label,
                 self.cam_2_label,
@@ -95,18 +102,40 @@ class MyApp(QMainWindow):
         )
 
     def closeEvent(self, event):
-        self.controller.release_captures()
+        self.cameras.release_captures()
         super().closeEvent(event)
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Escape:
             self.showMaximized()
         elif event.key() == Qt.Key_1:
-            self.controller.switch_primary_camera_to(0)
+            self.cameras.switch_primary_camera_to(0)
         elif event.key() == Qt.Key_2:
-            self.controller.switch_primary_camera_to(1)
+            self.cameras.switch_primary_camera_to(1)
         elif event.key() == Qt.Key_3:
-            self.controller.switch_primary_camera_to(2)
+            self.cameras.switch_primary_camera_to(2)
+
+    def toggle_view_mode(self):
+            camera_panel_container = self.ui.findChild(QWidget, "control_panel_camera_widget")
+            layout = camera_panel_container.layout()
+
+            if self.current_mode == "multi":
+                self.cameras.set_primary_only_view(camera_index=0)
+                self.secondary_cameras.hide()
+                layout.setRowStretch(0, 0)  # Top row
+                layout.setRowStretch(1, 1)  # Second row
+                self.current_mode = "primary"
+            else:
+                self.cameras.set_three_camera_view()
+                self.secondary_cameras.show()
+                layout.setRowStretch(0, 1)  # Top row
+                layout.setRowStretch(1, 0)  # Second row
+                self.current_mode = "multi"
+
+            # ⏩ Force layout recalculation
+            camera_panel_container.updateGeometry()
+            camera_panel_container.update()
+            camera_panel_container.repaint()
 
 
 def guiInitiate(): 

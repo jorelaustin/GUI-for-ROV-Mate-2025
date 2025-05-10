@@ -66,11 +66,11 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <layout class="QGridLayout" name="gridLayout_6" rowstretch="80">
+             <layout class="QGridLayout" name="gridLayout_6" rowstretch="0">
               <item row="0" column="1">
                <layout class="QGridLayout" name="gridLayout_24" rowstretch="20,80">
                 <item row="0" column="0">
-                 <widget class="QWidget" name="camera_feeds" native="true">
+                 <widget class="QWidget" name="secondary_camera_feeds" native="true">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -79,7 +79,7 @@
                   </property>
                   <layout class="QGridLayout" name="gridLayout_2">
                    <item row="0" column="0">
-                    <layout class="QGridLayout" name="secondary_camera_feeds" rowstretch="0" columnstretch="30,20,20,30">
+                    <layout class="QGridLayout" name="camera_feeds" rowstretch="0" columnstretch="20,20,20,20">
                      <item row="0" column="0">
                       <spacer name="horizontalSpacer">
                        <property name="orientation">
@@ -152,19 +152,16 @@
                 <item row="1" column="0">
                  <widget class="QWidget" name="primary_camera_feed" native="true">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                     <horstretch>0</horstretch>
                     <verstretch>1</verstretch>
                    </sizepolicy>
                   </property>
-                  <layout class="QGridLayout" name="gridLayout_15" rowstretch="0,1">
+                  <layout class="QGridLayout" name="gridLayout_15" rowstretch="0">
                    <item row="0" column="0">
-                    <layout class="QHBoxLayout" name="horizontalLayout_12"/>
-                   </item>
-                   <item row="1" column="0">
                     <widget class="QLabel" name="camera_feed_1">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -328,7 +325,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QGroupBox" name="digital_camera_control">
+                     <widget class="QGroupBox" name="digital_cameras_menu">
                       <property name="title">
                        <string>Cameras</string>
                       </property>
@@ -336,45 +333,58 @@
                        <set>Qt::AlignCenter</set>
                       </property>
                       <layout class="QGridLayout" name="gridLayout">
-                       <item row="1" column="0">
-                        <widget class="QPushButton" name="secondaryCamera_1_ToggleButton">
-                         <property name="text">
-                          <string>2nd - 1</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QPushButton" name="secondaryCamera_2_ToggleButton">
-                         <property name="text">
-                          <string>2nd - 2</string>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="0" column="0">
-                        <widget class="QPushButton" name="primaryCameraToggleButton">
+                        <widget class="QWidget" name="camera_controls" native="true">
+                         <layout class="QGridLayout" name="gridLayout_7">
+                          <item row="2" column="0">
+                           <widget class="QPushButton" name="secondaryCamera_2_ToggleButton">
+                            <property name="text">
+                             <string>2nd - 2</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QPushButton" name="primaryCameraToggleButton">
+                            <property name="text">
+                             <string>1st</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="0">
+                           <widget class="QPushButton" name="secondaryCamera_1_ToggleButton">
+                            <property name="text">
+                             <string>2nd - 1</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QComboBox" name="camera_feed_1_menu">
+                            <property name="sizeAdjustPolicy">
+                             <enum>QComboBox::AdjustToContents</enum>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="1">
+                           <widget class="QComboBox" name="camera_feed_2_menu">
+                            <property name="sizeAdjustPolicy">
+                             <enum>QComboBox::AdjustToContents</enum>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="2" column="1">
+                           <widget class="QComboBox" name="camera_feed_3_menu">
+                            <property name="sizeAdjustPolicy">
+                             <enum>QComboBox::AdjustToContents</enum>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="4" column="0">
+                        <widget class="QPushButton" name="toggleViewButton">
                          <property name="text">
-                          <string>1st</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QComboBox" name="camera_feed_1_menu">
-                         <property name="sizeAdjustPolicy">
-                          <enum>QComboBox::AdjustToContents</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QComboBox" name="camera_feed_2_menu">
-                         <property name="sizeAdjustPolicy">
-                          <enum>QComboBox::AdjustToContents</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QComboBox" name="camera_feed_3_menu">
-                         <property name="sizeAdjustPolicy">
-                          <enum>QComboBox::AdjustToContents</enum>
+                          <string>Toggle Camera View</string>
                          </property>
                         </widget>
                        </item>
@@ -392,7 +402,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QGroupBox" name="analog_camera_control">
+                     <widget class="QGroupBox" name="analog_cameras_menu">
                       <property name="title">
                        <string>External Camera Feed</string>
                       </property>
