@@ -4,9 +4,11 @@ import cv2
 app = Flask(__name__)
 
 # You can change 0 to a video stream URL or /dev/videoX
-camera = cv2.VideoCapture(1)
+#https://stackoverflow.com/questions/22259847/application-not-picking-up-css-file-flask-python
+
 
 def gen_frames():
+    camera = cv2.VideoCapture(1)
     while True:
         success, frame = camera.read()
         if not success:
