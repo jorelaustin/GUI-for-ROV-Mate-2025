@@ -3,12 +3,16 @@ body {
 	background-color: rgb(125, 189, 125);
 }
 
+h1 {
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
 
 
 .btn {
 	background-color: rgb(133, 133, 228);
 	color: white;
-	padding: 20px 40px;
+	padding: 15px 30px;
 	text-align: center;
 	font-size: 16px;
 }
