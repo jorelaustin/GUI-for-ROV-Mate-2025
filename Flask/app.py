@@ -28,6 +28,12 @@ def video_feed():
     return Response(gen_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+def feed():
+#	video_feed()
+	return render_template('video.html')
+
+
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5050)
 	app.run()
