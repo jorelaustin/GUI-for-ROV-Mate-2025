@@ -82,7 +82,7 @@ class MyApp(QMainWindow):
         self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton")
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
 
-        pi_ip = "192.168.1.252" 
+        pi_ip = "" 
         # Initialize camera handlers
         self.cameras = CAMERAS(
             labels=[
