@@ -16,7 +16,7 @@ def generate_frames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-@app.route('/video_feed')
+@app.route('/stream')
 def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -26,8 +26,4 @@ def index():
     return "Camera Stream Running..."
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8080)
-    args = parser.parse_args()
-
-    app.run(host='0.0.0.0', port=args.port)
+    app.run(host='0.0.0.0', port=8080)

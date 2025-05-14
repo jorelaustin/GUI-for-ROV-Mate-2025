@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtUiTools import QUiLoader
 
 from libaries.visual.visualEffects import STYLE
-from libaries.camera.cameras_new_2 import CAMERAS
+from libaries.camera.cameras_new import CAMERAS
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -61,7 +61,7 @@ class MyApp(QMainWindow):
         # Find object and it's name
         self.program_exit = self.ui.findChild(QPushButton, "program_exit") # Quit action
         # Connect the QAction "actionQuit" to quit the application
-        self.program_exit.clicked.connect(QApplication.instance().quit)  # Quit the application
+        self.program_exit.clicked.connect(self.safe_quit)  # Quit the application
 
         # Example toggle button in your GUI
         self.secondary_cameras = self.ui.findChild(QWidget, "secondary_camera_feeds")
@@ -82,7 +82,7 @@ class MyApp(QMainWindow):
         self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton")
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
 
-        pi_ip = "192.168.8.117" 
+        pi_ip = "192.168.1.252" 
         # Initialize camera handlers
         self.cameras = CAMERAS(
             labels=[
@@ -101,11 +101,15 @@ class MyApp(QMainWindow):
                 self.cam_3_toggle_btn
             ],
             urls=[
-                f"http://{pi_ip}:81/stream",
+                f"http://{pi_ip}:8080/stream",
                 "http://109.228.134.144:81/mjpg/video.mjpg",  # Halmstad, Sweden                            #f"http://{pi_ip}:8081/?action=stream",
                 "http://161.51.234.153:8080/mjpg/video.mjpg"  # Houston, Texas                              #f"http://{pi_ip}:8082/?action=stream"
             ]
         )
+
+    def safe_quit(self):
+        self.closeEvent
+        QApplication.instance().quit()
 
     def closeEvent(self, event):
         self.cameras.release_captures()
