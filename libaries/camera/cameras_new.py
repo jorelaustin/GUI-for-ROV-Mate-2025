@@ -1,7 +1,7 @@
 import sys
 import os
 import cv2
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import QTimer, Qt, QThread
 from PySide6.QtGui import QImage, QPixmap, QIcon
 
 class CAMERAS:
@@ -106,6 +106,7 @@ class CAMERAS:
                 continue
 
             # Crop to 16:9
+            '''
             h, w, _ = frame.shape
             desired_h = int(w * 9 / 16)
             desired_w = int(h * 16 / 9)
@@ -120,6 +121,7 @@ class CAMERAS:
                 y_offset = (h - desired_h) // 2
                 x_offset = (w - desired_w) // 2
                 frame = frame[y_offset:y_offset + desired_h, x_offset:x_offset + desired_w]
+                '''
 
             # Convert to RGB and show
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
