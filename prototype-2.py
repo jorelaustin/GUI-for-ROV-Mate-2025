@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtUiTools import QUiLoader
 
 from libaries.visual.visualEffects import STYLE
-from libaries.camera.cameras import CAMERAS
+from libaries.camera.cameras_new import CAMERAS
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -82,6 +82,7 @@ class MyApp(QMainWindow):
         self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton")
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
 
+        pi_ip = "192.168.8.117" 
         # Initialize camera handlers
         self.cameras = CAMERAS(
             labels=[
@@ -98,6 +99,11 @@ class MyApp(QMainWindow):
                 self.cam_1_toggle_btn,
                 self.cam_2_toggle_btn,
                 self.cam_3_toggle_btn
+            ],
+            urls=[
+                f"http://{pi_ip}:8080/video_feed",
+                "http://109.228.134.144:81/mjpg/video.mjpg",  # Halmstad, Sweden                            #f"http://{pi_ip}:8081/?action=stream",
+                "http://161.51.234.153:8080/mjpg/video.mjpg"  # Houston, Texas                              #f"http://{pi_ip}:8082/?action=stream"
             ]
         )
 
