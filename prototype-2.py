@@ -100,10 +100,10 @@ class MyApp(QMainWindow):
                 self.cam_2_toggle_btn,
                 self.cam_3_toggle_btn
             ],
-            urls=[
-                f"http://{pi_ip}:8080/stream",
-                "http://109.228.134.144:81/mjpg/video.mjpg",  # Halmstad, Sweden                            #f"http://{pi_ip}:8081/?action=stream",
-                "http://161.51.234.153:8080/mjpg/video.mjpg"  # Houston, Texas                              #f"http://{pi_ip}:8082/?action=stream"
+            ports=[
+                5005,
+                5006,
+                5007
             ]
         )
 
