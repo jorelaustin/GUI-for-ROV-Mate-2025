@@ -1,33 +1,32 @@
 import sys
 import os
 import cv2
-import socket
-import numpy as np
 from PySide6.QtCore import QTimer, Qt, QThread, Signal, QObject, Slot
 from PySide6.QtGui import QImage, QPixmap, QIcon
 
 class CameraWorker(QObject):
     frame_ready = Signal(int, object)
 
-    def __init__(self, index, port):
+    def __init__(self, index, url):
         super().__init__()
         self.index = index
-        self.port = port
+        self.url = url
         self.running = False
         self.cap = None
 
     @Slot()
     def start(self):
         self.running = True
-        # CHANGED
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.bind(('192.168.8.158', self.port))
+        self.cap = cv2.VideoCapture(self.url)
+        if not self.cap.isOpened():
+            print(f"[Worker] Failed to open stream: {self.url}")
+            return
+        print(f"[Worker] Started camera {self.index} at {self.url}")
 
         while self.running:
-            # CHANGED
-            packet, _ = sock.recvfrom(65536)
-            frame = cv2.imdecode(np.frombuffer(packet, dtype=np.uint8), 1)
-            self.frame_ready.emit(self.index, frame)
+            ret, frame = self.cap.read()
+            if ret:
+                self.frame_ready.emit(self.index, frame)
 
     def stop(self):
         self.running = False
@@ -35,7 +34,7 @@ class CameraWorker(QObject):
             self.cap.release()
 
 class CAMERAS:
-    def __init__(self, labels, combos, toggle_buttons, ports, num_cameras=3):
+    def __init__(self, labels, combos, toggle_buttons, urls, num_cameras=3):
         self.num_cameras = num_cameras
         self.labels = labels
         self.combos = combos
@@ -67,11 +66,10 @@ class CAMERAS:
             self.toggle_buttons[i].setStyleSheet("background-color: #424242;")
             self.toggle_buttons[i].toggled.connect(lambda checked, idx=i: self.toggle_feed(idx, checked))
 
-            # CHANGED
-            port = ports[i] if i < len(ports) else None
-            if port:
+            url = urls[i] if i < len(urls) else None
+            if url:
                 thread = QThread()
-                worker = CameraWorker(i, port)
+                worker = CameraWorker(i, url)
                 worker.moveToThread(thread)
                 worker.frame_ready.connect(self.handle_frame)
                 thread.started.connect(worker.start)
@@ -79,7 +77,7 @@ class CAMERAS:
                 self.threads.append(thread)
                 self.workers.append(worker)
             else:
-                print(f"[Warning] No port for camera {i}")
+                print(f"[Warning] No URL for camera {i}")
                 self.threads.append(None)
                 self.workers.append(None)
 

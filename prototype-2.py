@@ -82,7 +82,8 @@ class MyApp(QMainWindow):
         self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton")
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
 
-        pi_ip = "" 
+        # Remember to turn off Windows Defender Firewall
+        pi_ip = "192.168.8.114" 
         # Initialize camera handlers
         self.cameras = CAMERAS(
             labels=[
@@ -100,10 +101,10 @@ class MyApp(QMainWindow):
                 self.cam_2_toggle_btn,
                 self.cam_3_toggle_btn
             ],
-            ports=[
-                5005,
-                5006,
-                5007
+            server_addresses=[
+                f"{pi_ip}:5005",
+                f"{pi_ip}:5006",
+                f"{pi_ip}:5007"
             ]
         )
 

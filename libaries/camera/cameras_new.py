@@ -1,40 +1,54 @@
 import sys
 import os
 import cv2
+import socket
+import numpy as np
 from PySide6.QtCore import QTimer, Qt, QThread, Signal, QObject, Slot
 from PySide6.QtGui import QImage, QPixmap, QIcon
 
 class CameraWorker(QObject):
     frame_ready = Signal(int, object)
 
-    def __init__(self, index, url):
+    def __init__(self, index, ip_address):
         super().__init__()
+        parts = ip_address.split(':')
         self.index = index
-        self.url = url
+        self.ip_address = parts[0]
+        self.port = int(parts[1])
+        print(f"IP Address: {parts[0]}")
+        print(f"IP Address: {parts[1]}")
         self.running = False
         self.cap = None
+        self.sock = None # Initialize socket attribute
 
     @Slot()
     def start(self):
         self.running = True
-        self.cap = cv2.VideoCapture(self.url)
-        if not self.cap.isOpened():
-            print(f"[Worker] Failed to open stream: {self.url}")
-            return
-        print(f"[Worker] Started camera {self.index} at {self.url}")
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Assign to self.sock
+        self.sock.bind((self.ip_address, self.port))
 
         while self.running:
-            ret, frame = self.cap.read()
-            if ret:
-                self.frame_ready.emit(self.index, frame)
+            try:
+                packet, _ = self.sock.recvfrom(65536)
+                frame = cv2.imdecode(np.frombuffer(packet, dtype=np.uint8), 1)
+                if frame is not None: # Check if frame was successfully decoded
+                    self.frame_ready.emit(self.index, frame)
+            except socket.timeout: # Add timeout handling if you set a timeout
+                continue
+            except Exception as e:
+                print(f"Error receiving frame for camera {self.index}: {e}")
+                break # Exit loop on unhandled errors
 
     def stop(self):
         self.running = False
+        if self.sock:
+            self.sock.close() # Close the socket
+            print(f"Camera {self.index} socket closed.")
         if self.cap:
             self.cap.release()
 
 class CAMERAS:
-    def __init__(self, labels, combos, toggle_buttons, urls, num_cameras=3):
+    def __init__(self, labels, combos, toggle_buttons, server_addresses, num_cameras=3):
         self.num_cameras = num_cameras
         self.labels = labels
         self.combos = combos
@@ -66,10 +80,11 @@ class CAMERAS:
             self.toggle_buttons[i].setStyleSheet("background-color: #424242;")
             self.toggle_buttons[i].toggled.connect(lambda checked, idx=i: self.toggle_feed(idx, checked))
 
-            url = urls[i] if i < len(urls) else None
-            if url:
+            # CHANGED
+            ip_address = server_addresses[i] if i < len(server_addresses) else None
+            if ip_address:
                 thread = QThread()
-                worker = CameraWorker(i, url)
+                worker = CameraWorker(i, ip_address)
                 worker.moveToThread(thread)
                 worker.frame_ready.connect(self.handle_frame)
                 thread.started.connect(worker.start)
@@ -77,7 +92,7 @@ class CAMERAS:
                 self.threads.append(thread)
                 self.workers.append(worker)
             else:
-                print(f"[Warning] No URL for camera {i}")
+                print(f"[Warning] No IP address for camera {i}")
                 self.threads.append(None)
                 self.workers.append(None)
 
