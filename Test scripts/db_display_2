@@ -1,0 +1,190 @@
+import sys
+import sqlite3
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QScrollArea,
+    QPushButton, QFrame, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox
+)
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import QByteArray, Qt
+
+class EntryWidget(QWidget):
+    def __init__(self, row_data, column_names, db_path):
+        super().__init__()
+        self.db_path = db_path
+        self.table_name = row_data[column_names.index("table_name")]
+        self.image_data = row_data[column_names.index("image")]
+
+        layout = QVBoxLayout(self)
+        row_layout = QHBoxLayout()
+
+        # Display timestamp
+        timestamp = row_data[column_names.index("timestamp")]
+        timestamp_label = QLabel(str(timestamp))
+        timestamp_label.setStyleSheet("color: black; font-size: 16px;")
+        row_layout.addWidget(timestamp_label)
+
+        row_layout.addStretch()
+
+        # View/Hide button
+        self.toggle_button = QPushButton("View")
+        #self.toggle_button.setStyleSheet("padding: 4px 12px;")
+        self.toggle_button.clicked.connect(self.toggle_dropdown)
+        row_layout.addWidget(self.toggle_button)
+
+        # Delete button
+        self.delete_button = QPushButton("Delete")
+        #self.delete_button.setStyleSheet("padding: 4px 12px;")
+        self.delete_button.clicked.connect(self.handle_delete)
+        row_layout.addWidget(self.delete_button)
+
+        layout.addLayout(row_layout)
+
+        # Collapsible area
+        self.dropdown_widget = QWidget()
+        self.dropdown_layout = QVBoxLayout(self.dropdown_widget)
+        self.dropdown_widget.setVisible(False)
+        layout.addWidget(self.dropdown_widget)
+
+        # Border style
+        '''
+        self.setStyleSheet("""
+            QWidget {
+                border: 1px solid black;
+                border-radius: 8px;
+                color: black;
+            }
+        """)
+        '''
+
+    def toggle_dropdown(self):
+        if self.dropdown_widget.isVisible():
+            self.dropdown_widget.setVisible(False)
+            self.toggle_button.setText("View")
+        else:
+            if self.dropdown_layout.count() == 0:
+                self.load_table_data()
+            self.dropdown_widget.setVisible(True)
+            self.toggle_button.setText("Hide")
+
+    def load_table_data(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute(f"SELECT * FROM '{self.table_name}'")
+            rows = cursor.fetchall()
+            col_names = [desc[0] for desc in cursor.description]
+
+            # Create and configure the table widget
+            table = QTableWidget(len(rows), len(col_names))
+            table.setHorizontalHeaderLabels(col_names)
+            table.setSizeAdjustPolicy(QTableWidget.AdjustToContents)
+            table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+            table.setMinimumWidth(300)
+
+            for row_idx, row in enumerate(rows):
+                for col_idx, value in enumerate(row):
+                    table.setItem(row_idx, col_idx, QTableWidgetItem(str(value)))
+
+            # Decode and show image
+            pixmap = QPixmap()
+            pixmap.loadFromData(QByteArray(self.image_data))
+            image_label = QLabel()
+            image_label.setPixmap(pixmap.scaledToWidth(400, Qt.SmoothTransformation))
+            #image_label.setStyleSheet("padding: 10px; background-color: white; border: 1px solid #ddd;")
+
+            # Create horizontal layout and container widget
+            h_widget = QWidget()
+            h_layout = QHBoxLayout(h_widget)
+            h_layout.setContentsMargins(0, 0, 0, 0)
+            h_layout.addWidget(table)
+            h_layout.addWidget(image_label)
+
+            # Wrap in scroll area to prevent horizontal clipping
+            scroll_area = QScrollArea()
+            scroll_area.setWidgetResizable(True)
+            scroll_area.setWidget(h_widget)
+
+            # Add the scroll area to the dropdown section
+            self.dropdown_layout.addWidget(scroll_area)
+
+        except sqlite3.Error as e:
+            error_label = QLabel(f"Error loading table {self.table_name}: {e}")
+            self.dropdown_layout.addWidget(error_label)
+
+        finally:
+            conn.close()
+    
+    def handle_delete(self):
+        confirm = QMessageBox.question(
+            self, "Confirm Delete",
+            f"Delete entry for '{self.table_name}'?\nThis will also drop the data table.",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if confirm == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+
+                # Delete from metadata
+                cursor.execute("DELETE FROM metadata WHERE table_name = ?", (self.table_name,))
+                # Drop associated table
+                cursor.execute(f"DROP TABLE IF EXISTS '{self.table_name}'")
+                conn.commit()
+
+                conn.close()
+
+                # Remove the widget from the parent layout
+                self.setParent(None)
+                self.deleteLater()
+
+            except sqlite3.Error as e:
+                QMessageBox.critical(self, "Error", f"Failed to delete: {e}")
+
+
+class DatabaseViewer(QWidget):
+    def __init__(self, db_path):
+        super().__init__()
+        self.setWindowTitle("Custom DB Viewer")
+        self.resize(700, 700)
+
+        main_layout = QVBoxLayout(self)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        main_layout.addWidget(scroll_area)
+
+        container = QWidget()
+        self.entries_layout = QVBoxLayout(container)
+        self.entries_layout.setSpacing(10)
+        scroll_area.setWidget(container)
+
+        self.load_data(db_path)
+
+    def load_data(self, db_path):
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT * FROM metadata")
+        rows = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+
+        for i, row_data in enumerate(rows):
+            entry_widget = EntryWidget(row_data, column_names, db_path)
+            self.entries_layout.addWidget(entry_widget)
+
+            if i < len(rows) - 1:
+                line = QFrame()
+                line.setFrameShape(QFrame.HLine)
+                #line.setFrameShadow(QFrame.Sunken)
+                line.setStyleSheet("color: blue; padding: none;")
+                self.entries_layout.addWidget(line)
+
+        connection.close()
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    viewer = DatabaseViewer("database/drone_data.db")  # Update path if needed
+    viewer.show()
+    sys.exit(app.exec())

@@ -66,9 +66,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="dataButton">
+        <widget class="QPushButton" name="shipwreckButton">
          <property name="text">
-          <string>Data</string>
+          <string>Shipwreck</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="eDNAButton">
+         <property name="text">
+          <string>eDNA</string>
          </property>
         </widget>
        </item>
@@ -76,6 +83,13 @@
         <widget class="QPushButton" name="mappingButton">
          <property name="text">
           <string>Mapping</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="floatButton">
+         <property name="text">
+          <string>Float</string>
          </property>
         </widget>
        </item>
@@ -104,7 +118,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="control_panel_page">
        <property name="sizePolicy">
@@ -309,8 +323,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>207</width>
-                   <height>356</height>
+                   <width>258</width>
+                   <height>543</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_10">
@@ -487,6 +501,38 @@
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
                       </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_4">
+                       <item>
+                        <widget class="QLabel" name="timerLabel">
+                         <property name="text">
+                          <string>00:00:00</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QWidget" name="timer_buttons_menu" native="true">
+                         <layout class="QGridLayout" name="gridLayout_21">
+                          <item row="0" column="0">
+                           <widget class="QPushButton" name="resetTimerButton">
+                            <property name="text">
+                             <string>Reset</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QPushButton" name="toggleTimerButton">
+                            <property name="text">
+                             <string>Start</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                    </layout>
@@ -516,25 +562,391 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="data_panel_page">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QWidget" name="shipwreck_panel_page">
        <layout class="QGridLayout" name="gridLayout_9">
+        <item row="2" column="1">
+         <widget class="QComboBox" name="shipCargo_menu">
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>bricks</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>coal</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>furnace sand</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>wheat</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="shipLength_spinBox"/>
+        </item>
+        <item row="4" column="0" alignment="Qt::AlignHCenter">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Ship Name:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="shipFinishButton">
+          <property name="text">
+           <string>Finish</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
-         <widget class="QWidget" name="data_panel_tab" native="true">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Type</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Cargo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Length</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="shipType_menu">
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>freighter</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>paddlewheel</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>schooner</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLabel" name="shipNameDisplay">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="eDNA_panel_page">
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="0">
+         <widget class="QWidget" name="widget" native="true">
           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="70,30">
            <item>
-            <widget class="QWidget" name="database" native="true"/>
+            <widget class="QWidget" name="eDNA_samples" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QWidget" name="eDNA_sample_1" native="true">
+                <layout class="QGridLayout" name="gridLayout_17" columnstretch="70,30">
+                 <item row="0" column="0">
+                  <widget class="QWidget" name="eDNA_label_1" native="true">
+                   <layout class="QGridLayout" name="gridLayout_19" columnstretch="40,60">
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="sample2Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="text">
+                       <string>Sample 1</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_9">
+                      <property name="text">
+                       <string>Sample 3</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_7">
+                      <property name="text">
+                       <string>Sample 2</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="sample1Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="sample3Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_11">
+                      <property name="text">
+                       <string>Sample 4</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="sample4Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_13">
+                      <property name="text">
+                       <string>Sample 5</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLabel" name="sample5Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <spacer name="horizontalSpacer_16">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="eDNA_sample_2" native="true">
+                <layout class="QGridLayout" name="gridLayout_18" columnstretch="70,30">
+                 <item row="0" column="0">
+                  <widget class="QWidget" name="eDNA_label_2" native="true">
+                   <layout class="QGridLayout" name="gridLayout_20" columnstretch="40,60">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_16">
+                      <property name="text">
+                       <string>Sample 6</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLabel" name="sample10Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_17">
+                      <property name="text">
+                       <string>Sample 7</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_19">
+                      <property name="text">
+                       <string>Sample 9</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_18">
+                      <property name="text">
+                       <string>Sample 8</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_20">
+                      <property name="text">
+                       <string>Sample 10</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="sample9Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="sample8Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="sample7Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="sample6Label">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <spacer name="horizontalSpacer_17">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
            <item>
-            <widget class="QWidget" name="data_panel_menu" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="35,8,3,8,3,8,35">
+            <widget class="QWidget" name="eDNA_button_panel" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <spacer name="horizontalSpacer_5">
+               <spacer name="horizontalSpacer_14">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>418</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="attachFileEDNA">
+                <property name="text">
+                 <string>Attach File</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>417</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="mapping_panel_page">
+       <layout class="QGridLayout" name="gridLayout_13">
+        <item row="0" column="0">
+         <widget class="QWidget" name="mapping_panel" native="true">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_14" rowstretch="70,30">
+           <item row="0" column="0">
+            <widget class="QWidget" name="mapping_button_widget" native="true">
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="0" column="1">
+               <widget class="QLabel" name="mapLabel">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Map</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <spacer name="horizontalSpacer_12">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -546,13 +958,25 @@
                 </property>
                </spacer>
               </item>
-              <item>
-               <widget class="QPushButton" name="recordButton">
-                <property name="text">
-                 <string>Record</string>
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
-               </widget>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QWidget" name="mapping_image_widget" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="35,8,6,8,6,8,35">
               <item>
                <spacer name="horizontalSpacer_7">
                 <property name="orientation">
@@ -567,14 +991,14 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="attachFile">
+               <widget class="QPushButton" name="previous">
                 <property name="text">
-                 <string>Attach File</string>
+                 <string>Previous</string>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_9">
+               <spacer name="horizontalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -587,14 +1011,34 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="refreshButton">
+               <widget class="QPushButton" name="attachFileMapping">
                 <property name="text">
-                 <string>Refresh </string>
+                 <string>Attach File</string>
                 </property>
                </widget>
               </item>
               <item>
                <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="next">
+                <property name="text">
+                 <string>Next</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_11">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -614,7 +1058,78 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="mapping_panel_page"/>
+      <widget class="QWidget" name="float_panel_page">
+       <layout class="QGridLayout" name="gridLayout_11">
+        <item row="2" column="1">
+         <widget class="QWidget" name="float_panel_tab" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="70,30">
+           <item>
+            <widget class="QWidget" name="database_display" native="true"/>
+           </item>
+           <item>
+            <widget class="QWidget" name="float_panel_menu" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="40,8,4,8,40">
+              <item>
+               <spacer name="horizontalSpacer_9">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>418</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="attachFileFloat">
+                <property name="text">
+                 <string>Attach File</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_18">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="refreshButton">
+                <property name="text">
+                 <string>Refresh</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_10">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>417</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

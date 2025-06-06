@@ -48,13 +48,23 @@ class STYLE():
                 padding: 6px 12px;
             }
                                 
-            #dataButton, #mappingButton{
+            #shipwreckButton, #eDNAButton, #mappingButton, #floatButton{
                 font-size: 12pt;
                 color: white;
                 background-color: #424242;
                 border-radius: 14px;
                 padding: 6px 12px;
             }
+                                
+            #toggleTimerButton {
+                background-color: green;
+            }     
+
+            #timerLabel {
+                font-size: 40px;
+                color: white;
+                padding-top: 4px;
+            }                                   
                                 
             QComboBox {
                 background-color: #424242;               
@@ -77,8 +87,22 @@ class STYLE():
                 background-color: black;                    
             }
                                 
-            QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget, #buttonsPanel{
+            QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget, #buttonsPanel {
                 border: 1px solid #fafafa;
                 border-radius: 10px;
             }       
+                                
+            #entryWidget, #database_display, #float_panel_menu {
+                border: 1px solid #fafafa;                    
+            }
+                                
+            QTableWidget {
+                background-color: #212121;   
+                color: #fafafa;                               
+            }
+                                
+            QTableWidget::item {
+                border: 1px solid #fafafa;
+            }
+                                
         """)
