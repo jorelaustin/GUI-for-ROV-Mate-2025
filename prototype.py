@@ -1,15 +1,22 @@
+import os
+import cv2
 import sys
-from PySide6.QtGui import QAction, QFont, QFontDatabase, QKeyEvent
+import pandas as pd
+from PySide6.QtGui import QAction, QFont, QFontDatabase, QPixmap, QImage, QKeyEvent  
 from PySide6.QtCore import QCoreApplication, QFile, Qt, QTimer
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QStackedWidget, QLabel, QComboBox, QWidget, QVBoxLayout
+    QApplication, QMainWindow, QPushButton, QStackedWidget, QLabel,
+    QComboBox, QWidget, QFileDialog
 )
 from PySide6.QtUiTools import QUiLoader
 
-from libaries.visual.visualEffects import STYLE
-from libaries.window.fileDialog import FILE_SELECTOR
-from libaries.visual.entryViewer import ENTRY_WIDGET
-from libaries.camera.cameras import CAMERAS
+from libraries.visual.visualEffects import STYLE
+from libraries.window.fileDialog import FILE_SELECTOR
+from libraries.visual.entryViewer import ENTRY_WIDGET
+from libraries.camera.cameras import CAMERAS
+from libraries.shipwreck.shipwreckLogic import SHIPWRECK_LOGIC
+from libraries.mapping.model_carp import CARP_REGION_MODEL
+
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -51,6 +58,8 @@ class MyApp(QMainWindow):
         self.style.setStylesheet(QApplication.instance())
 
         self.controlPanelTab() # Control Panel
+        self.shipwreckPanelTab() # Shipwreck Panel
+        self.mappingPanelTab() # Model Carp Regions Panel
         self.floatPanelTab() # Float Panel
         
 
@@ -209,6 +218,111 @@ class MyApp(QMainWindow):
             camera_panel_container.update()
             camera_panel_container.repaint()
 
+    # ──────────────────────── SHIPWRECK PANEL PAGE SETUP ────────────────────────
+    # Sets up all widgets, signals, and logic related to the Shipwreck Panel page.
+
+    def shipwreckPanelTab(self):
+        self.shipwreckLogic = SHIPWRECK_LOGIC()
+
+        # Attach image file button
+        self.attachFileShipwreckButton = self.ui.findChild(QPushButton, "attachFileShipwreck") 
+        self.attachFileShipwreckButton.clicked.connect(lambda: self.shipwreckLogic.shipwreck_length(self))
+
+        # Finish button to identify ship
+        self.shipFinishButton = self.ui.findChild(QPushButton, "shipFinishButton")
+        self.shipFinishButton.clicked.connect(lambda: self.shipwreckLogic.shipwreck_identifier(self))
+
+        # Labels for displaying ship name and image
+        self.shipNameLabel = self.ui.findChild(QLabel, "shipNameDisplay")
+        self.shipwreckImageLabel = self.ui.findChild(QLabel, "shipwreckImageLabel")
+
+        # Dropdown menus for ship attributes
+        self.shipType_menu = self.ui.findChild(QComboBox, "shipType_menu")
+        self.shipLength_menu = self.ui.findChild(QComboBox, "shipLength_menu")
+        self.shipCargo_menu = self.ui.findChild(QComboBox, "shipCargo_menu")
+
+        # Finish button to identify ship
+        self.shipwreckResetButton = self.ui.findChild(QPushButton, "shipwreckResetButton")
+        self.shipwreckResetButton.clicked.connect(self.clear_shipwreck_panel)
+
+        # Clear all menus and add default placeholder
+        self.shipType_menu.clear()
+        self.shipLength_menu.clear()
+        self.shipCargo_menu.clear()
+
+        self.shipType_menu.addItem("Select ship type...")
+        self.shipLength_menu.addItem("Select length...")
+        self.shipCargo_menu.addItem("Select cargo...")
+
+        # Populate static options
+        self.shipType_menu.addItems([
+            "freighter - propeller",
+            "paddlewheel - octogonal paddlewheel",
+            "schooner - brown mast"
+        ])
+
+        self.shipLength_menu.addItems([
+            "1.27", "1.48", "1.73", "1.97"
+        ])
+
+        self.shipCargo_menu.addItems([
+            "coal - black",
+            "wheat - yellow",
+            "bricks - red",
+            "furnace sand - white"
+        ])
+
+    def clear_shipwreck_panel(self):
+        self.shipType_menu.setCurrentIndex(0)
+        self.shipLength_menu.setCurrentIndex(0)
+        self.shipCargo_menu.setCurrentIndex(0)
+        self.shipNameLabel.clear()
+        self.shipwreckImageLabel.clear()
+
+    # ──────────────────────── MAPPING PANEL PAGE SETUP ────────────────────────
+    # Sets up all widgets, signals, and logic related to the Mapping Panel page.
+
+    def mappingPanelTab(self):
+
+        # Find's image path and converts image into a Pixmap
+        self.mapLabel = self.ui.findChild(QLabel, "mapLabel")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        map_path = os.path.join(base_dir, 'libraries', 'mapping', 'region_images', 'Location-of-the-Illinois-River-basin.png')
+        map_pixmap = QPixmap(map_path)
+
+        # Call class library from mapping
+        self.model = CARP_REGION_MODEL(self.mapLabel, self)
+
+        # Scale to 60% to Pixmap of original size
+        scaled_pixmap = self.model.scale_pixmap(map_pixmap, 0.45)
+        self.mapLabel.setPixmap(scaled_pixmap)
+
+        # Mapping Panel UI Controls
+        self.attachFileMapButton = self.ui.findChild(QPushButton, "attachFileMapping")
+        self.attachFileMapButton.clicked.connect(self.model.model_map_regions)
+
+        self.previousButton = self.ui.findChild(QPushButton, "previous")
+        self.previousButton.clicked.connect(self.model.previous_map)
+
+        self.nextButton = self.ui.findChild(QPushButton, "next")
+        self.nextButton.clicked.connect(self.model.next_map)
+
+        self.mappingFailsafeButton = self.ui.findChild(QPushButton, "mappingFailsafeButton")
+        self.mappingFailsafeButton.clicked.connect(self.model.model_map_regions_failsafe)
+
+        self.mappingResetButton = self.ui.findChild(QPushButton, "mappingResetButton")
+        self.mappingResetButton.clicked.connect(self.clearMap)
+
+    def clearMap(self):
+        self.mapLabel = self.ui.findChild(QLabel, "mapLabel")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        map_path = os.path.join(base_dir, 'libraries', 'mapping', 'region_images', 'Location-of-the-Illinois-River-basin.png')
+        map_pixmap = QPixmap(map_path)
+
+        self.mapLabel.clear()
+        scaled_pixmap = self.model.scale_pixmap(map_pixmap, 0.45)
+        self.mapLabel.setPixmap(scaled_pixmap)
+
     # ──────────────────────── FLOAT PANEL PAGE SETUP ────────────────────────
     # Sets up all widgets, signals, and logic related to the Float Panel page.
     def floatPanelTab(self):
@@ -237,7 +351,6 @@ class MyApp(QMainWindow):
         self.dialog.show()
         
 
-
 # Function to activate program
 def guiInitiate(): 
     """
@@ -253,6 +366,9 @@ def guiInitiate():
 
     NONE
     """
+    import os
+    os.environ["QT_LOGGING_RULES"] = "*.debug=false;qt.qpa.*=false"
+
     # Set the attribute BEFORE creating QApplication
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     # Run the application

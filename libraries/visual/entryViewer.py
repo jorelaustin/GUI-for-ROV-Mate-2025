@@ -1,7 +1,7 @@
 import sqlite3
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout, QScrollArea,
-    QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox, QFrame
+    QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox, QFrame, QSizePolicy
 )
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import QByteArray, Qt
@@ -11,6 +11,8 @@ class ENTRY_WIDGET(QWidget):
     def __init__(self, row_data, column_names, db_path):
         super().__init__()
         self.setObjectName("entryWidget")
+        self.setMinimumHeight(80)
+        self.setSizePolicy(self.sizePolicy().horizontalPolicy(), QSizePolicy.Minimum) 
         self.db_path = db_path
         self.table_name = row_data[column_names.index("table_name")]
         self.image_data = row_data[column_names.index("image")]
@@ -52,6 +54,8 @@ class ENTRY_WIDGET(QWidget):
                 self.load_table_data()
             self.dropdown_widget.setVisible(True)
             self.toggle_button.setText("Hide")
+
+        self.adjustSize()
 
     def load_table_data(self):
         conn = sqlite3.connect(self.db_path)

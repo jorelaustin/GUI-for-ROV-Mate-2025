@@ -69,6 +69,10 @@ class STYLE():
             QComboBox {
                 background-color: #424242;               
             }
+                            
+            #shipNameDisplay {
+                font-size: 40px;                    
+            }
 
             QWidget {
                 background-color: #161616;
@@ -87,12 +91,14 @@ class STYLE():
                 background-color: black;                    
             }
                                 
-            QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget, #buttonsPanel {
+            QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget,
+            #buttonsPanel, #shipwreck_image_result_panel, #shipwreck_gui_panel, #database_display, 
+            #float_panel_menu, #mapping_button_widget, #mapping_image_widget {
                 border: 1px solid #fafafa;
                 border-radius: 10px;
             }       
                                 
-            #entryWidget, #database_display, #float_panel_menu {
+            #entryWidget {
                 border: 1px solid #fafafa;                    
             }
                                 
