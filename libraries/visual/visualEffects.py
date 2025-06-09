@@ -56,6 +56,12 @@ class STYLE():
                 padding: 6px 12px;
             }
                                 
+            #eDNAInput {
+                background-color: #424242;
+                font-size: 16pt;
+                color: white;                                    
+            }
+                                
             #toggleTimerButton {
                 background-color: green;
             }     
@@ -93,7 +99,8 @@ class STYLE():
                                 
             QStackedWidget, #control_panel_camera_widget, #control_panel_functions_widget,
             #buttonsPanel, #shipwreck_image_result_panel, #shipwreck_gui_panel, #database_display, 
-            #float_panel_menu, #mapping_button_widget, #mapping_image_widget {
+            #float_panel_menu, #mapping_button_widget, #mapping_image_widget,
+            #eDNA_panel_page_tab  {
                 border: 1px solid #fafafa;
                 border-radius: 10px;
             }       
@@ -101,6 +108,17 @@ class STYLE():
             #entryWidget {
                 border: 1px solid #fafafa;                    
             }
+                                
+            #eDNA_samples_panel_groupbox QLabel{
+                border: 1px solid #fafafa;
+                color: #fafafa;
+                font-size: 22px;
+            }    
+                                
+            #fail_safe_species_label, #eDNA_sample_display{
+                color: #fafafa;
+                font-size: 20px;
+            }    
                                 
             QTableWidget {
                 background-color: #212121;   

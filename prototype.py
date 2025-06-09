@@ -15,7 +15,8 @@ from libraries.window.fileDialog import FILE_SELECTOR
 from libraries.visual.entryViewer import ENTRY_WIDGET
 from libraries.camera.cameras import CAMERAS
 from libraries.shipwreck.shipwreckLogic import SHIPWRECK_LOGIC
-from libraries.mapping.model_carp import CARP_REGION_MODEL
+from libraries.mapping.modelCarpRegionLogic import CARP_REGION_MODEL
+from libraries.scanning.eDNA import EDNA_LOGIC
 
 
 class MyApp(QMainWindow):
@@ -59,6 +60,7 @@ class MyApp(QMainWindow):
 
         self.controlPanelTab() # Control Panel
         self.shipwreckPanelTab() # Shipwreck Panel
+        self.eDNAPanelTab() # eDNA Identification panel
         self.mappingPanelTab() # Model Carp Regions Panel
         self.floatPanelTab() # Float Panel
         
@@ -278,6 +280,45 @@ class MyApp(QMainWindow):
         self.shipCargo_menu.setCurrentIndex(0)
         self.shipNameLabel.clear()
         self.shipwreckImageLabel.clear()
+
+    # ──────────────────────── E-DNA PANEL PAGE SETUP ────────────────────────
+    # Sets up all widgets, signals, and logic related to the E-DNA Panel page.
+
+    def eDNAPanelTab(self):
+        # Find all QLabel widgets
+        self.sample1Label = self.ui.findChild(QLabel, "sample1Label")
+        self.sample2Label = self.ui.findChild(QLabel, "sample2Label")
+        self.sample3Label = self.ui.findChild(QLabel, "sample3Label")
+        self.sample4Label = self.ui.findChild(QLabel, "sample4Label")
+        self.sample5Label = self.ui.findChild(QLabel, "sample5Label")
+        self.sample6Label = self.ui.findChild(QLabel, "sample6Label")
+        self.sample7Label = self.ui.findChild(QLabel, "sample7Label")
+        self.sample8Label = self.ui.findChild(QLabel, "sample8Label")
+        self.sample9Label = self.ui.findChild(QLabel, "sample9Label")
+        self.sample10Label = self.ui.findChild(QLabel, "sample10Label")
+
+        # Create a list of labels to pass to the logic class
+        self.eDNA_labels = [
+            self.sample1Label, self.sample2Label, self.sample3Label, self.sample4Label, self.sample5Label,
+            self.sample6Label, self.sample7Label, self.sample8Label, self.sample9Label, self.sample10Label
+        ]
+
+        # Instantiate the logic handler with reference to this GUI (self)
+        self.eDNA_logic = EDNA_LOGIC(self, self.eDNA_labels)
+
+        # Hook up your buttons to the methods in eDNA_logic
+        # Attach File Button
+        self.attachFileEDNAButton = self.ui.findChild(QPushButton, "attachFileEDNA")
+        self.attachFileEDNAButton.clicked.connect(self.eDNA_logic.identify_invasive_carp)
+
+        # Manual Input Button
+        self.eDNAFailsafeButton = self.ui.findChild(QPushButton, "eDNAFailsafeButton")
+        self.eDNAFailsafeButton.clicked.connect(self.eDNA_logic.identify_invasive_carp_failsafe)
+
+        # Clear Results Button
+        self.eDNAClearResultsButton = self.ui.findChild(QPushButton, "eDNAClearResultsButton")
+        self.eDNAClearResultsButton.clicked.connect(self.eDNA_logic.clear_results)
+    
 
     # ──────────────────────── MAPPING PANEL PAGE SETUP ────────────────────────
     # Sets up all widgets, signals, and logic related to the Mapping Panel page.

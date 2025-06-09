@@ -118,7 +118,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="control_panel_page">
        <property name="sizePolicy">
@@ -703,187 +703,40 @@
       <widget class="QWidget" name="eDNA_panel_page">
        <layout class="QGridLayout" name="gridLayout_12">
         <item row="0" column="0">
-         <widget class="QWidget" name="widget" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="70,30">
+         <widget class="QWidget" name="eDNA_panel_page_tab" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,70">
            <item>
-            <widget class="QWidget" name="eDNA_samples" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <widget class="QWidget" name="eDNA_button_panel" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <widget class="QWidget" name="eDNA_sample_1" native="true">
-                <layout class="QGridLayout" name="gridLayout_17" columnstretch="70,30">
-                 <item row="0" column="0">
-                  <widget class="QWidget" name="eDNA_label_1" native="true">
-                   <layout class="QGridLayout" name="gridLayout_19" columnstretch="40,60">
-                    <item row="1" column="1">
-                     <widget class="QLabel" name="sample2Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="label_5">
-                      <property name="text">
-                       <string>Sample 1</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_9">
-                      <property name="text">
-                       <string>Sample 3</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_7">
-                      <property name="text">
-                       <string>Sample 2</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLabel" name="sample1Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QLabel" name="sample3Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="label_11">
-                      <property name="text">
-                       <string>Sample 4</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QLabel" name="sample4Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="label_13">
-                      <property name="text">
-                       <string>Sample 5</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QLabel" name="sample5Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
+               <widget class="QGroupBox" name="eDNA_button_panel_groupbox">
+                <property name="title">
+                 <string>eDNA Controls</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="8,8,8,74">
+                 <item>
+                  <widget class="QPushButton" name="attachFileEDNA">
+                   <property name="text">
+                    <string>Attach File</string>
+                   </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
-                  <spacer name="horizontalSpacer_16">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                 <item>
+                  <widget class="QPushButton" name="eDNAFailsafeButton">
+                   <property name="text">
+                    <string>Manual Input</string>
                    </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="eDNA_sample_2" native="true">
-                <layout class="QGridLayout" name="gridLayout_18" columnstretch="70,30">
-                 <item row="0" column="0">
-                  <widget class="QWidget" name="eDNA_label_2" native="true">
-                   <layout class="QGridLayout" name="gridLayout_20" columnstretch="40,60">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="label_16">
-                      <property name="text">
-                       <string>Sample 6</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QLabel" name="sample10Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_17">
-                      <property name="text">
-                       <string>Sample 7</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="label_19">
-                      <property name="text">
-                       <string>Sample 9</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_18">
-                      <property name="text">
-                       <string>Sample 8</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="label_20">
-                      <property name="text">
-                       <string>Sample 10</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QLabel" name="sample9Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QLabel" name="sample8Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QLabel" name="sample7Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLabel" name="sample6Label">
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
-                 <item row="0" column="1">
-                  <spacer name="horizontalSpacer_17">
+                 <item>
+                  <widget class="QPushButton" name="eDNAClearResultsButton">
+                   <property name="text">
+                    <string>Clear Results</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_15">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -902,40 +755,228 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="eDNA_button_panel" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <widget class="QWidget" name="eDNA_samples_panel" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <spacer name="horizontalSpacer_14">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+               <widget class="QGroupBox" name="eDNA_samples_panel_groupbox">
+                <property name="title">
+                 <string>eDNA Samples</string>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>418</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="attachFileEDNA">
-                <property name="text">
-                 <string>Attach File</string>
-                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QWidget" name="widget_2" native="true">
+                   <layout class="QGridLayout" name="gridLayout_16" columnstretch="40,60">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>SAMPLE 1:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="sample1Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="text">
+                       <string>SAMPLE 2:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="sample2Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="sample3Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_7">
+                      <property name="text">
+                       <string>SAMPLE 4:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLabel" name="sample4Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_8">
+                      <property name="text">
+                       <string>SAMPLE 5:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QLabel" name="sample5Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_6">
+                      <property name="text">
+                       <string>SAMPLE 3:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_3" native="true">
+                   <layout class="QGridLayout" name="gridLayout_17" columnstretch="40,60">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_15">
+                      <property name="text">
+                       <string>SAMPLE 6:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="sample6Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_17">
+                      <property name="text">
+                       <string>SAMPLE 7:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="sample7Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_19">
+                      <property name="text">
+                       <string>SAMPLE 8:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="sample8Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_21">
+                      <property name="text">
+                       <string>SAMPLE 9:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="sample9Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_22">
+                      <property name="text">
+                       <string>SAMPLE 10:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLabel" name="sample10Label">
+                      <property name="text">
+                       <string>-----</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_15">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>417</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </widget>
