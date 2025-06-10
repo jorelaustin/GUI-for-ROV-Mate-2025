@@ -1,0 +1,23 @@
+
+body {
+	background-color: rgb(125, 189, 125);
+}
+
+h1 {
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+p {
+	font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+
+.btn {
+	background-color: rgb(133, 133, 228);
+	color: white;
+	padding: 15px 30px;
+	text-align: center;
+	font-size: 16px;
+}
