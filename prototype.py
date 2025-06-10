@@ -13,7 +13,7 @@ from PySide6.QtUiTools import QUiLoader
 from libraries.visual.visualEffects import STYLE
 from libraries.window.fileDialog import FILE_SELECTOR
 from libraries.visual.entryViewer import ENTRY_WIDGET
-from libraries.camera.cameras import CAMERAS
+from libraries.camera.cameras_new import CAMERAS
 from libraries.shipwreck.shipwreckLogic import SHIPWRECK_LOGIC
 from libraries.mapping.modelCarpRegionLogic import CARP_REGION_MODEL
 from libraries.scanning.eDNA import EDNA_LOGIC
@@ -25,7 +25,7 @@ class MyApp(QMainWindow):
 
         # Load UI file dynamically
         loader = QUiLoader()
-        file = QFile("ui/main4.1-test.ui")  # Path to your UI file
+        file = QFile("ui/main5.ui")  # Path to your UI file
         file.open(QFile.ReadOnly)
         self.ui = loader.load(file)  # Loads in "main.ui" 
         self.setCentralWidget(self.ui)
@@ -90,50 +90,46 @@ class MyApp(QMainWindow):
         # Connect the QAction "actionQuit" to quit the application
         self.program_exit.clicked.connect(self.safe_quit)  # Quit the application
 
-        # Example toggle button in your GUI
-        self.secondary_cameras = self.ui.findChild(QWidget, "secondary_camera_feeds")
-        self.toggle_view_button = self.ui.findChild(QPushButton, "toggleViewButton")
-        self.toggle_view_button.clicked.connect(self.toggle_view_mode)
+        # Start in Multi-View
+        self.cameras_stacked_widget = self.ui.findChild(QStackedWidget, "camerasStackedWidget")
+        self.cameras_stacked_widget.setCurrentIndex(0)
         self.current_mode = "multi"
 
-        # Dynamically change children once for
+        # Multi-View
         self.cam_1_label = self.ui.findChild(QLabel, "camera_feed_1")
         self.cam_2_label = self.ui.findChild(QLabel, "camera_feed_2")
         self.cam_3_label = self.ui.findChild(QLabel, "camera_feed_3")
 
+        '''
+        # Multi-View-2
+        self.cam_4_label = self.ui.findChild(QLabel, "camera_feed_4")
+        self.cam_5_label = self.ui.findChild(QLabel, "camera_feed_5")
+        self.cam_6_label = self.ui.findChild(QLabel, "camera_feed_6")
+
+        # Multi-View-2
+        self.cam_7_label = self.ui.findChild(QLabel, "camera_feed_7")
+        '''
+
         self.cam_1_combo = self.ui.findChild(QComboBox, "camera_feed_1_menu")
-        self.cam_2_combo = self.ui.findChild(QComboBox, "camera_feed_2_menu")
-        self.cam_3_combo = self.ui.findChild(QComboBox, "camera_feed_3_menu")
+        self.cam_2_combo = self.ui.findChild(QComboBox, "camera_feed_2_menu") # Hides on Primary View
+        self.cam_3_combo = self.ui.findChild(QComboBox, "camera_feed_3_menu") # Hides on Primary View
 
         self.cam_1_toggle_btn = self.ui.findChild(QPushButton, "primaryCameraToggleButton")
-        self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton")
-        self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton")
+        self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton") # Hides on Primary View
+        self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton") # Hides on Primary View
 
         # Remember to turn off Windows Defender Firewall
         pi_ip = "" 
+        ports = [5005, 5006, 5007]
         # Initialize camera handlers
-        self.cameras = CAMERAS(
-            labels=[
-                self.cam_1_label,
-                self.cam_2_label,
-                self.cam_3_label
-            ],
-            combos=[
-                self.cam_1_combo,
-                self.cam_2_combo,
-                self.cam_3_combo
-            ],
-            toggle_buttons=[
-                self.cam_1_toggle_btn,
-                self.cam_2_toggle_btn,
-                self.cam_3_toggle_btn
-            ],
-            server_addresses=[
-                f"{pi_ip}:5005",
-                f"{pi_ip}:5006",
-                f"{pi_ip}:5007"
-            ]
-        )
+        self.init_camera_multi_view_1(pi_ip, ports)
+
+        # View toggle button
+        '''
+        self.toggle_view_button = self.ui.findChild(QPushButton, "toggleViewButton")
+        self.toggle_view_button.clicked.connect(lambda: self.toggle_view_mode(pi_ip, ports, ports_2))
+        self.toggle_view_button.setText("Switch to Multi-2 View")  # First cycle
+        '''
 
         # Competition timer display
         self.timerDisplayLabel = self.ui.findChild(QLabel, "timerLabel")
@@ -150,6 +146,40 @@ class MyApp(QMainWindow):
         self.timer.timeout.connect(self.update_label)
         self.elapsed_ms = 0
         self.running = False
+
+    # Multi-View-1
+    def init_camera_multi_view_1(self, pi_ip, ports):
+        server_addresses = [f"{pi_ip}:{port}" for port in ports]
+
+        self.cameras = CAMERAS(
+            labels = [self.cam_1_label, self.cam_2_label, self.cam_3_label],
+            combos = [self.cam_1_combo, self.cam_2_combo, self.cam_3_combo],
+            toggle_buttons = [self.cam_1_toggle_btn, self.cam_2_toggle_btn, self.cam_3_toggle_btn],
+            server_addresses = server_addresses
+        )
+
+    '''
+    # Multi-View-2
+    def init_camera_multi_view_2(self, pi_ip, ports):
+        server_addresses = [f"{pi_ip}:{port}" for port in ports]
+
+        self.cameras = CAMERAS(
+            labels = [self.cam_4_label, self.cam_5_label, self.cam_6_label],
+            combos = [self.cam_1_combo, self.cam_2_combo, self.cam_3_combo],
+            toggle_buttons = [self.cam_1_toggle_btn, self.cam_2_toggle_btn, self.cam_3_toggle_btn],
+            server_addresses = server_addresses
+        )
+
+    def init_camera_primary_view(self, pi_ip, ports):
+        server_addresses = [f"{pi_ip}:{port}" for port in ports]
+
+        self.cameras = CAMERAS(
+            labels = [self.cam_7_label],
+            combos = [self.cam_1_combo],
+            toggle_buttons = [self.cam_1_toggle_btn],
+            server_addresses = server_addresses
+        )
+    '''
 
     # Safely exits the program
     def safe_quit(self):
@@ -193,32 +223,62 @@ class MyApp(QMainWindow):
         hundredths = (self.elapsed_ms % 1000) // 10
         self.timerDisplayLabel.setText(f"{minutes:02d}:{seconds:02d}:{hundredths:02d}") 
 
-    # FIXME: Toggles between different camera view modes:
-    # - "Multi": All three cameras visible, primary feed enlarged.
-    # - "Primary": Only the primary camera is displayed.
-    # - "Multi-2": All three camera feeds shown with equal size.
+    '''
+    def toggle_view_mode(self, pi_ip, ports, ports_2):
+        if hasattr(self, "cameras"):
+            self.view_switching = True
+            self.cameras.set_controls_enabled(False)
+            self.cameras.release_captures()
 
-    def toggle_view_mode(self):
-            camera_panel_container = self.ui.findChild(QWidget, "control_panel_camera_widget")
-            layout = camera_panel_container.layout()
+        QTimer.singleShot(250, lambda: self._switch_view_mode_2(pi_ip, ports, ports_2))
 
-            if self.current_mode == "multi":
-                self.cameras.set_primary_only_view(camera_index=0)
-                self.secondary_cameras.hide()
-                layout.setRowStretch(0, 0)  # Top row
-                layout.setRowStretch(1, 1)  # Second row
-                self.current_mode = "primary"
-            else:
-                self.cameras.set_three_camera_view()
-                self.secondary_cameras.show()
-                layout.setRowStretch(0, 1)  # Top row
-                layout.setRowStretch(1, 0)  # Second row
-                self.current_mode = "multi"
+    def _switch_view_mode(self, pi_ip, ports):
+        if self.current_mode == "multi":
+            self.cameras_stacked_widget.setCurrentIndex(1)
+            self.init_camera_multi_view_2(pi_ip, ports)
+            self.toggle_view_button.setText("Switch to Primary View")
+            self.current_mode = "multi-2"
 
-            # ⏩ Force layout recalculation
-            camera_panel_container.updateGeometry()
-            camera_panel_container.update()
-            camera_panel_container.repaint()
+        elif self.current_mode == "multi-2":
+            self.cameras_stacked_widget.setCurrentIndex(2)
+            self.init_camera_primary_view(pi_ip, ports)
+            self.toggle_view_button.setText("Switch to Multi View")
+            self.current_mode = "primary"
+
+        else:
+            self.cameras_stacked_widget.setCurrentIndex(0)
+            self.init_camera_multi_view_1(pi_ip, ports)
+            self.toggle_view_button.setText("Switch to Multi-2 View")
+            self.current_mode = "multi"
+
+        self.view_switching = False
+        if hasattr(self, "cameras"):
+            self.cameras.set_controls_enabled(True)
+
+    def _switch_view_mode_2(self, pi_ip, ports, ports_2):
+    # Safely stop current camera session
+        if hasattr(self, "cameras"):
+            self.cameras.release_captures()
+
+        if self.current_mode == "multi":
+            self.cameras_stacked_widget.setCurrentIndex(1)
+            self.init_camera_multi_view_2(pi_ip, ports)
+            self.toggle_view_button.setText("Switch to Multi View")
+            self.current_mode = "multi-2"
+
+        else:  # Default to multi
+            self.cameras_stacked_widget.setCurrentIndex(0)
+            self.init_camera_multi_view_1(pi_ip, ports_2)
+            self.toggle_view_button.setText("Switch to Multi-2 View")
+            self.current_mode = "multi"
+
+        self.view_switching = False
+
+        # Re-enable controls after switching view
+        if hasattr(self, "cameras"):
+            self.cameras.set_controls_enabled(True)
+
+    '''
 
     # ──────────────────────── SHIPWRECK PANEL PAGE SETUP ────────────────────────
     # Sets up all widgets, signals, and logic related to the Shipwreck Panel page.

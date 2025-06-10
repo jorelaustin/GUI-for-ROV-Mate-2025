@@ -1,4 +1,3 @@
-import sys
 import os
 import cv2
 import socket
@@ -6,92 +5,89 @@ import numpy as np
 from PySide6.QtCore import QTimer, Qt, QThread, Signal, QObject, Slot
 from PySide6.QtGui import QImage, QPixmap, QIcon
 
-# Worker class to receive video frames over UDP in a separate thread
 class CameraWorker(QObject):
-
-    # Signal to emit the received frame along with camera index
     frame_ready = Signal(int, object)
 
     def __init__(self, index, ip_address):
         super().__init__()
-        # Parse IP address and port
-        parts = ip_address.split(':')
         self.index = index
+        parts = ip_address.split(":")
         self.ip_address = parts[0]
         self.port = int(parts[1])
-        print(f"IP Address: {parts[0]}")
-        print(f"IP Address: {parts[1]}")
         self.running = False
-        self.cap = None
-        self.sock = None # Initialize socket attribute
+        self.sock = None
 
     @Slot()
     def start(self):
         self.running = True
-        # Create and bind UDP socket
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Assign to self.sock
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 💡 Allow reuse
         self.sock.bind((self.ip_address, self.port))
 
         while self.running:
             try:
-                # Receive UDP packet and decode it into a frame
                 packet, _ = self.sock.recvfrom(65536)
                 frame = cv2.imdecode(np.frombuffer(packet, dtype=np.uint8), 1)
-                if frame is not None: # Check if frame was successfully decoded
+                if frame is not None:
                     self.frame_ready.emit(self.index, frame)
-            except socket.timeout: # Add timeout handling if you set a timeout
-                continue # Handle socket timeout if configured
+            except socket.timeout:
+                continue
             except Exception as e:
                 print(f"Error receiving frame for camera {self.index}: {e}")
-                break # Stop loop on unhandled errors
+                break
 
     def stop(self):
         self.running = False
         if self.sock:
-            self.sock.close() # Close the socket
+            self.sock.close()
             print(f"Camera {self.index} socket closed.")
-        if self.cap:
-            self.cap.release() # Release video capture if used
 
-# Manager class to handle multiple camera feeds
 class CAMERAS:
     def __init__(self, labels, combos, toggle_buttons, server_addresses, num_cameras=3):
         self.num_cameras = num_cameras
-        self.labels = labels
-        self.combos = combos
-        self.toggle_buttons = toggle_buttons
 
-        # Track selected camera source for each display
-        self.selected_camera_indices = [0, 1, 2]
-        self.feed_enabled = [False] * 3
+        # Normalize to lists (even if one element passed)
+        self.labels = labels if isinstance(labels, list) else [labels]
+        self.combos = combos if isinstance(combos, list) else [combos]
+        self.toggle_buttons = toggle_buttons if isinstance(toggle_buttons, list) else [toggle_buttons]
+
+        self.display_slots = len(self.labels)  # 1 or 3
+
+        self.feed_enabled = [False] * self.display_slots
+        self.selected_camera_indices = [0] * self.display_slots
         self.frames = [None] * self.num_cameras
 
         self.threads = []
         self.workers = []
 
-        # Load icon and no signal image path
+        # Load icon and no signal path
         icon_path = os.path.join(os.path.dirname(__file__), "..", "..", "graphics", "white_camera.png")
         self.icon = QIcon(os.path.normpath(icon_path))
         self.no_signal_path = os.path.join(os.path.dirname(__file__), "..", "..", "graphics", "no_signal.png").replace("\\", "/")
 
-        # Initialize camera display sections
-        for i in range(self.num_cameras):
+        # Set up each display slot
+        for i in range(self.display_slots):
             self.labels[i].setAlignment(Qt.AlignCenter)
             self.labels[i].clear()
 
-            # Setup camera selection dropdown
             self.combos[i].addItems([f"Camera {j+1}" for j in range(self.num_cameras)])
-            self.combos[i].setCurrentIndex(i)
+            self.combos[i].setCurrentIndex(i % self.num_cameras)
+
+            try:
+                self.combos[i].currentIndexChanged.disconnect(self.update_camera_selection)
+            except (TypeError, RuntimeError):
+                pass  # Signal wasn't connected yet, which is fine
+
             self.combos[i].currentIndexChanged.connect(self.update_camera_selection)
 
-            # Setup toggle buttons for enabling/disabling feeds
             self.toggle_buttons[i].setCheckable(True)
             self.toggle_buttons[i].setChecked(False)
             self.toggle_buttons[i].setIcon(self.icon)
             self.toggle_buttons[i].setStyleSheet("background-color: #424242;")
-            self.toggle_buttons[i].toggled.connect(lambda checked, idx=i: self.toggle_feed(idx, checked))
+            self.toggle_buttons[i].toggled.connect(self._make_toggle_handler(i))
 
-             # Create and start camera worker threads
+        # Start each camera worker thread
+        for i in range(self.num_cameras):
             ip_address = server_addresses[i] if i < len(server_addresses) else None
             if ip_address:
                 thread = QThread()
@@ -107,47 +103,53 @@ class CAMERAS:
                 self.threads.append(None)
                 self.workers.append(None)
 
-        # Timer to refresh the GUI with latest frames
+        # Start timer to refresh display
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frames)
         self.timer.start(30)
 
+        self.update_camera_selection()
+
     @Slot(int, object)
     def handle_frame(self, index, frame):
-        # Store latest frame for the given camera
         self.frames[index] = frame
 
     def update_camera_selection(self):
-        # Update the camera source index based on dropdown selection
         self.selected_camera_indices = [combo.currentIndex() for combo in self.combos]
 
     def toggle_feed(self, index, checked):
-        # Enable or disable video feed for a display slot
         self.feed_enabled[index] = checked
-        if checked:
-            self.toggle_buttons[index].setStyleSheet("background-color: #007ACC;")
-        else:
-            self.toggle_buttons[index].setStyleSheet("background-color: #424242;")
+        self.toggle_buttons[index].setStyleSheet(
+            "background-color: #007ACC;" if checked else "background-color: #424242;"
+        )
+
+    def _make_toggle_handler(self, index):
+        return lambda checked: self.toggle_feed(index, checked)
+
+    def set_controls_enabled(self, enabled):
+        for btn in self.toggle_buttons:
+            if btn:
+                btn.setEnabled(enabled)
+        for combo in self.combos:
+            if combo:
+                combo.setEnabled(enabled)
 
     def update_frames(self):
-        # Called by timer to update displayed frames
-        for i in range(3):
+        for i in range(self.display_slots):
             cam_index = self.selected_camera_indices[i]
 
             if not self.feed_enabled[i]:
-                # If feed is off, show black screen
                 black_pixmap = QPixmap(self.labels[i].size())
                 black_pixmap.fill(Qt.black)
                 self.labels[i].setPixmap(black_pixmap)
                 continue
 
             if cam_index >= len(self.frames):
-                continue # Invalid index, skip
+                continue
 
             frame = self.frames[cam_index]
 
             if frame is None:
-                # If no frame yet, show "no signal"
                 no_signal_pixmap = QPixmap(self.no_signal_path)
                 scaled_pixmap = no_signal_pixmap.scaled(
                     self.labels[i].size(), Qt.KeepAspectRatio, Qt.SmoothTransformation
@@ -155,7 +157,6 @@ class CAMERAS:
                 self.labels[i].setPixmap(scaled_pixmap)
                 continue
 
-            # Convert frame from BGR to RGB and display it
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w, ch = rgb.shape
             bytes_per_line = ch * w
@@ -169,12 +170,11 @@ class CAMERAS:
         # Switch first view to a new camera feed
         if 0 <= new_index < self.num_cameras:
             self.combos[0].setCurrentIndex(new_index)
-            print(f"[Info] Switched primary feed to camera index {new_index}")
+            # print(f"[Info] Switched primary feed to camera index {new_index}")
             if not self.feed_enabled[0]:
                 self.toggle_buttons[0].click()
 
     def release_captures(self):
-        # Gracefully stop all workers and threads
         for worker in self.workers:
             if worker:
                 worker.stop()
@@ -182,4 +182,7 @@ class CAMERAS:
         for thread in self.threads:
             if thread:
                 thread.quit()
-                thread.wait()
+                thread.wait()  # 🛑 Waits for thread to finish cleanly
+
+        self.threads.clear()
+        self.workers.clear()

@@ -93,7 +93,7 @@ class STYLE():
                 background-color: #424242        
             }
                                 
-            #camera_feed_1, #camera_feed_2, #camera_feed_3, #camera_feed_4 {
+            #camera_feed_1, #camera_feed_2, #camera_feed_3, #camera_feed_4, #camera_feed_5, #camera_feed_6, #camera_feed_7 {
                 background-color: black;                    
             }
                                 
