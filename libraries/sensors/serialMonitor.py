@@ -42,7 +42,7 @@ class TETHER_COUNTER:
         self.tetherReader.data_received.connect(lambda reading: self.display_data(parent, reading))
 
     def display_data(self, parent, reading):
-        parent.tetherDisplay.setText(f"Tether Out: {reading}")
+        parent.tetherDisplay.setText(reading)
 
 class PH_SENSOR:
     def connect(self, parent):
@@ -51,4 +51,4 @@ class PH_SENSOR:
         self.pHReader.data_received.connect(lambda reading: self.display_data(parent, reading))
 
     def display_data(self, parent, reading):
-        parent.pHDisplay.setText(f"pH: {reading}")    
+        parent.pHDisplay.setText(reading)    
