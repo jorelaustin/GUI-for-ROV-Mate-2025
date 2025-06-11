@@ -152,7 +152,7 @@
               <item row="0" column="0">
                <widget class="QStackedWidget" name="camerasStackedWidget">
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="multiview_1">
                  <layout class="QGridLayout" name="gridLayout_18">
@@ -448,25 +448,13 @@
                        <set>Qt::AlignCenter</set>
                       </property>
                       <layout class="QGridLayout" name="gridLayout_8">
-                       <item row="0" column="1">
-                        <widget class="QPushButton" name="control_rov_connect">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>0</height>
-                          </size>
-                         </property>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="tether_counter_label">
                          <property name="text">
-                          <string>CONNECT</string>
+                          <string>Tether Counter</string>
                          </property>
-                         <property name="checkable">
-                          <bool>true</bool>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
                          </property>
                         </widget>
                        </item>
@@ -492,13 +480,25 @@
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="rov_label">
-                         <property name="text">
-                          <string>ROV</string>
+                       <item row="2" column="1">
+                        <widget class="QPushButton" name="control_tether_connect">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
                          </property>
-                         <property name="alignment">
-                          <set>Qt::AlignCenter</set>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>CONNECT</string>
+                         </property>
+                         <property name="checkable">
+                          <bool>true</bool>
                          </property>
                         </widget>
                        </item>
@@ -509,6 +509,23 @@
                          </property>
                          <property name="alignment">
                           <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <widget class="QLabel" name="ph_sensor_label">
+                         <property name="text">
+                          <string>pH Sensor</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="1">
+                        <widget class="QPushButton" name="control_pH_connect">
+                         <property name="text">
+                          <string>CONNECT</string>
                          </property>
                         </widget>
                        </item>
@@ -590,6 +607,54 @@
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
                       </property>
+                      <layout class="QGridLayout" name="gridLayout_27">
+                       <item row="1" column="1">
+                        <widget class="QLabel" name="phDisplay">
+                         <property name="styleSheet">
+                          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+                         </property>
+                         <property name="text">
+                          <string>-----</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QLabel" name="tetherDisplay">
+                         <property name="styleSheet">
+                          <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+                         </property>
+                         <property name="text">
+                          <string>-----</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_9">
+                         <property name="text">
+                          <string>Tether Out:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_10">
+                         <property name="text">
+                          <string>pH:</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                     <item>

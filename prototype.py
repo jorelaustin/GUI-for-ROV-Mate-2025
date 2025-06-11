@@ -17,7 +17,8 @@ from libraries.camera.cameras_new import CAMERAS
 from libraries.shipwreck.shipwreckLogic import SHIPWRECK_LOGIC
 from libraries.mapping.modelCarpRegionLogic import CARP_REGION_MODEL
 from libraries.scanning.eDNA import EDNA_LOGIC
-
+from libraries.sensors.serialMonitor import SERIAL_READER, TETHER_COUNTER, PH_SENSOR
+#from libraries.controller.connect import Controls
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -84,6 +85,9 @@ class MyApp(QMainWindow):
     # Sets up all widgets, signals, and logic related to the Control Panel page.
 
     def controlPanelTab(self):
+        #self.controls = Controls()
+        self.tetherCounter = TETHER_COUNTER()
+        self.pHSensor = PH_SENSOR()
         
         # Find object and it's name
         self.program_exit = self.ui.findChild(QPushButton, "program_exit") # Quit action
@@ -117,6 +121,20 @@ class MyApp(QMainWindow):
         self.cam_1_toggle_btn = self.ui.findChild(QPushButton, "primaryCameraToggleButton")
         self.cam_2_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_1_ToggleButton") # Hides on Primary View
         self.cam_3_toggle_btn = self.ui.findChild(QPushButton, "secondaryCamera_2_ToggleButton") # Hides on Primary View
+
+        # Communication Setup Buttons
+        self.control_controller_connect = self.ui.findChild(QPushButton, "control_controller_connect")
+        self.control_tether_connect = self.ui.findChild(QPushButton, "control_tether_connect")
+        self.control_pH_connect = self.ui.findChild(QPushButton, "control_pH_connect")
+
+        # Sensors Labels
+        self.tetherDisplay = self.ui.findChild(QLabel, "tetherDisplay")
+        self.pHDisplay = self.ui.findChild(QLabel, "pHDisplay")
+
+        # Connect communication setup and sensors
+        #self.control_controller_connect.clicked.connect(self.controls.connect)
+        self.control_tether_connect.clicked.connect(lambda: self.tetherCounter.connect(self))
+        self.control_pH_connect.clicked.connect(lambda: self.pHSensor.connect(self))
 
         # Remember to turn off Windows Defender Firewall
         pi_ip = "" 
