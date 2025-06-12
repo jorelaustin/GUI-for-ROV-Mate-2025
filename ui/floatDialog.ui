@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FloatDialog</class>
+ <widget class="QDialog" name="FloatDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>489</width>
+    <height>254</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>FloatDialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QPlainTextEdit" name="messageInput"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="floatSend">
+     <property name="text">
+      <string>SEND</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="floatGo">
+     <property name="styleSheet">
+      <string notr="true">background-color: green;</string>
+     </property>
+     <property name="text">
+      <string>GO</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QPushButton" name="floatStop">
+     <property name="styleSheet">
+      <string notr="true">background-color: red;</string>
+     </property>
+     <property name="text">
+      <string>STOP</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="messageReceived">
+     <property name="text">
+      <string>MESSAGE RECEIVED:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="messageSent">
+     <property name="text">
+      <string>MESSAGE SENT:</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
