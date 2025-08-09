@@ -32,8 +32,8 @@ ENG REN/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/<your-username>/ENG-REN.git
-cd ENG-REN
+git clone https://github.com/jorelaustin/GUI-for-ROV-Mate-2025.git
+cd GUI-for-ROV-Mate-2025
 ```
 
 2. Create and activate a virtual environment:
