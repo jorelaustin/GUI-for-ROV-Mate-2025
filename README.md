@@ -32,7 +32,7 @@ ENG REN/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/jorelaustin/GUI-for-ROV-Mate-2025.git
+git clone https://github.com/living-proof/GUI-for-ROV-Mate-2025.git
 cd GUI-for-ROV-Mate-2025
 ```
 
